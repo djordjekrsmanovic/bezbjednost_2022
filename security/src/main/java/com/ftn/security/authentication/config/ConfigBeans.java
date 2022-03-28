@@ -1,4 +1,4 @@
-package com.ftn.security.authentication;
+package com.ftn.security.authentication.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

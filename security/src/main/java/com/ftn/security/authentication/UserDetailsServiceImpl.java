@@ -1,8 +1,8 @@
 package com.ftn.security.authentication;
 
-import com.ftn.security.model.ApplicationRole;
-import com.ftn.security.model.ApplicationUser;
-import com.ftn.security.service.UserService;
+import com.ftn.security.model.Role;
+import com.ftn.security.model.Client;
+import com.ftn.security.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -19,18 +19,18 @@ import java.util.List;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private static final String ROLE_PREFIX = "ROLE_";
-    private final UserService userService;
+    private final ClientService userService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        ApplicationUser user = userService.getUserByUserName(email);
+        Client user = userService.getClientByMail(email);
         if (user == null) {
             throw new UsernameNotFoundException(email);
         }
-        return new User(email, user.getPassword(), getRole(user.getApplicationRole()));
+        return new User(email, user.getPassword(), getRole(user.getRole()));
     }
 
-    private List<SimpleGrantedAuthority> getRole(ApplicationRole role) {
+    private List<SimpleGrantedAuthority> getRole(Role role) {
         List<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
         String roleName = ROLE_PREFIX + role;
         grantedAuthorities.add(new SimpleGrantedAuthority(roleName));
