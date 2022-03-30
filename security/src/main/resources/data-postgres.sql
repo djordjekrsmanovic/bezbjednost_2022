@@ -1,0 +1,1 @@
+insert into client(mail, password, role) values ('admin@security.com', 'admin', 0);
