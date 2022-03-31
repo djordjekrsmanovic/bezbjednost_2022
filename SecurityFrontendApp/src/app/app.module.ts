@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LoginPageComponent } from './login-page/login-page.component';
+import { LoginPageComponent } from './pages/login/login-page.component';
 import { AdminHomePageComponent } from './admin-home-page/admin-home-page.component';
 import { ClientHomePageComponent } from './client-home-page/client-home-page.component';
 import { FormsModule } from '@angular/forms';

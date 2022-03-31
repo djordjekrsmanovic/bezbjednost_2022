@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthenticationRequest } from './AuthenticationRequest';
-import { AuthenticationResponse } from './AuthenticationResponse';
-import { LoginService } from './login.service';
+import { AuthenticationRequest } from '../../model/AuthenticationRequest';
+import { AuthenticationResponse } from '../../model/AuthenticationResponse';
+import { LoginService } from '../../service/login.service';
 
 
 @Component({

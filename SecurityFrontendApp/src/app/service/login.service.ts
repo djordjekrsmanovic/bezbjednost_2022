@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthenticationRequest } from './AuthenticationRequest';
-import { AuthenticationResponse } from './AuthenticationResponse';
+import { AuthenticationRequest } from '../model/AuthenticationRequest';
+import { AuthenticationResponse } from '../model/AuthenticationResponse';
 
 
 @Injectable({
