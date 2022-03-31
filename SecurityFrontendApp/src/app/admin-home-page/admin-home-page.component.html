@@ -1,1 +1,148 @@
-<p>admin-home-page works!</p>
+<div *ngIf="!toggleDetailWin">
+<div style="margin-bottom: 40px; margin-top: 30px; margin-left: 40px; justify-content: space-between;">
+<ul class="nav">
+    <li class="nav-item" style="margin-right: 30px;">
+        <button type="button" (click)="selectRootCertTab()" class="btn btn-primary" aria-pressed="false" autocomplete="off">
+            Root Certificate
+          </button>
+    </li>
+    <li class="nav-item" style="margin-right: 30px;">
+        <button type="button" (click)="selectOtherCertTab()" class="btn btn-primary" aria-pressed="false" autocomplete="off">
+            Other Certificates
+          </button>
+    </li>
+    <li class="nav-item" style="margin-right: 30px;">
+        <button type="button" (click)="selectAllCertsTab()" class="btn btn-primary" aria-pressed="false" autocomplete="off">
+            All Certificates
+          </button>
+    </li>
+  </ul>
+</div>
+
+<!-- Dodavanje root sertifikata-->
+<div class="container" *ngIf="rootCertTab">
+    
+</div>
+
+<!-- Dodavanje intermediary i end-entity sertifikata -->
+<div class="container" *ngIf="otherCertTab">
+  <div *ngIf="phase==1">
+    <p style="margin-bottom: 30px;">Select user from a list to assign certificate:</p>
+    <table class="table" style="max-height: 400px;">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">Assign Certificate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr (click)="selectUser()">
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+          </tr>
+        </tbody>
+      </table>       
+    </div> 
+    <div *ngIf="phase==2">
+      Druga faza
+    </div>
+    <div *ngIf="phase==3">
+      <label for="" style="margin: 10%;">Pick expiration date: <input type="date"> </label>
+    </div>
+
+
+    <button type="button" *ngIf="phase>1" (click)="returnToPreviousPhase()" class="btn btn-primary" style="margin-right: 40px;" aria-pressed="false" autocomplete="off">
+      Back
+    </button>    
+    <button type="button" (click)="otherCerts2Phase()" class="btn btn-primary" aria-pressed="false" autocomplete="off">
+      Next
+    </button> 
+</div>
+
+<!-- Pregled svih sertifikata -->
+<div class="container" *ngIf="allCertsTab">
+    <button (click)="toggleFilters()" type="button" class="btn btn-primary" aria-pressed="false" autocomplete="off">Filters</button>
+    <div *ngIf="filtersCard">
+    <div class="input-group" style="margin-left:28%;">
+        <div style="margin:15px; margin-right: 100px;">
+        <label for="">Expiration date:  <input type="date"></label>
+        </div>
+        <div style="display: flex; flex-flow: column wrap;">
+        <label for=""><input type="checkbox" name="" id="" checked="true" onchange=""> Include root certificates</label>
+        <label for=""><input type="checkbox" name="" id="" checked="true" onchange=""> Include intermediary certificates</label>
+        <label for=""><input type="checkbox" name="" id="" checked="true" onchange=""> Include end-entity certificates</label>
+        </div>
+    </div>
+    <hr>
+    </div>
+   
+
+    <div>
+    <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Revoke Certificate</th>
+            <th scope="col">Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>
+                <button type="button" class="btn btn-primary">
+                    Revoke
+                </button>
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary" (click)="toggleModal()">
+                    Details
+                </button>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+            <td>sff</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>     
+</div>
+</div>
+
+<div *ngIf="toggleDetailWin"> 
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle">Certificate details</h5>
+        </div>
+        <div class="modal-body">
+          Issuer:
+          tralala
+          Subject:
+          tralala
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="downloadCertificate()">Download Certificate</button>
+        <button type="button" class="btn btn-secondary" (click)="toggleModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
