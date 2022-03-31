@@ -1,0 +1,42 @@
+<div class="container" style="margin-top: 120px;">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-sm-6">
+        
+        <div class="input-login-style">
+          <label class="form-label">Email</label>
+            <input
+              [(ngModel)]="authenticationRequest.mail"
+              type="text"
+              placeholder=""
+              class="form-control"
+            />
+            <br>
+            <label class="form-label">Password</label>
+            <input
+              [(ngModel)]="authenticationRequest.password"
+              type="password"
+              placeholder=""
+              class="form-control"
+            />
+            <br> <br>
+            <h6 class="text-center" style="color: red;">{{errorMessage}}</h6>
+            <button type="button" style="width: 100%;" class="btn btn-secondary" (click)="login()">
+              Log in</button>
+        </div>
+     
+      </div>
+      <div class="col-sm-6">
+        <img
+        src="../assets/undraw_secure_login_pdn4.svg"
+        class="img-fluid"
+        alt=""
+        />
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
