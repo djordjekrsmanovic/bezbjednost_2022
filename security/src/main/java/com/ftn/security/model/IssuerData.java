@@ -1,5 +1,6 @@
 package com.ftn.security.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -10,8 +11,9 @@ import java.security.PrivateKey;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Issuer {
+@AllArgsConstructor
+public class IssuerData {
 
-    private X500Name x500name;
     private PrivateKey privateKey;
+    private X500Name x500name;
 }
