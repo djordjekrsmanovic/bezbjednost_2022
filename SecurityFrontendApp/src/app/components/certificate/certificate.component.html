@@ -1,0 +1,123 @@
+<div>
+    <div class="card">
+        <div class="card-body">
+            <h3 class="text-center">Certificate</h3>
+            <hr class="bg-dark border-1 border-top border-dark">
+            <div class="row" style="margin-top: 30px;">
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-4"></div>
+                        <div class="col"><h4 class="card-title">Subject</h4></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">User ID:</p></div>
+                        <div class="col"><h6>{{certificate.subjectData.userID}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Email:</p></div>
+                        <div class="col"><h6>{{certificate.subjectData.email}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Country:</p></div>
+                        <div class="col"><h6>{{certificate.subjectData.country}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Organization Unit:</p></div>
+                        <div class="col"><h6>{{certificate.subjectData.organizationUnit}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Organization Name:</p></div>
+                        <div class="col"><h6>{{certificate.subjectData.organizationName}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Given Name:</p></div>
+                        <div class="col"><h6>{{certificate.subjectData.givenName}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Common Name:</p></div>
+                        <div class="col"><h6>{{certificate.subjectData.commonName}}</h6></div>
+                    </div>
+                  
+                    
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-4"></div>
+                        <div class="col"><h4 class="card-title">Issuer</h4></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">User ID:</p></div>
+                        <div class="col"><h6>{{certificate.issuerData.userID}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Email:</p></div>
+                        <div class="col"><h6>{{certificate.issuerData.email}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Country:</p></div>
+                        <div class="col"><h6>{{certificate.issuerData.country}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Organization Unit:</p></div>
+                        <div class="col"><h6>{{certificate.issuerData.organizationUnit}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Organization Name:</p></div>
+                        <div class="col"><h6>{{certificate.issuerData.organizationName}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Given Name:</p></div>
+                        <div class="col"><h6>{{certificate.issuerData.givenName}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Common Name:</p></div>
+                        <div class="col"><h6>{{certificate.issuerData.commonName}}</h6></div>
+                    </div>
+                </div>
+            </div>
+            <hr class="bg-dark border-1 border-top border-dark">
+            <div class="row">
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Certificate Type:</p></div>
+                        <div class="col"><h6>{{certificate.certificateType}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Serial Number:</p></div>
+                        <div class="col"><h6>{{certificate.serialNumber}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">Start Date:</p></div>
+                        <div class="col"><h6>{{certificate.startDate | date : 'medium'}}</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p class="card-text">End Date:</p></div>
+                        <div class="col"><h6>{{certificate.endDate | date : 'medium'}}</h6></div>
+                    </div>
+                </div>
+                <div class="col-6">
+                   <div class="row">
+                        <div class="col-6">
+                            <h5 class="card-title">Key Usages</h5>
+                            <ul>
+                                <li *ngFor="let keyUsage of certificate.keyUsages">{{keyUsage}}</li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <h5 class="card-title">Extended Key Usages</h5>
+                            <ul>
+                                <li *ngFor="let exkeyUsage of certificate.extendedKeyUsages">{{exkeyUsage}}</li>
+                            </ul>
+                        </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+    <h4 class="card-title">Card title</h4>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+-->

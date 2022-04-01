@@ -25,7 +25,7 @@ public class CertificateDTO {
     private List<ExtendedKeyUsage> extendedKeyUsages;
     private CertificateType certificateType;
 
-    public CertificateDTO(X509Certificate x509cer, List<KeyUsage> keyUsages, List<ExtendedKeyUsage> extendedKeyUsages) {
+    public CertificateDTO(X509Certificate x509cer, List<KeyUsage> keyUsages, List<ExtendedKeyUsage> extendedKeyUsages, CertificateType certificateType) {
         this.subjectData = new InformationData(x509cer.getSubjectDN().getName());
         this.issuerData = new InformationData(x509cer.getIssuerDN().getName());
         this.serialNumber = x509cer.getSerialNumber().toString();
@@ -33,12 +33,7 @@ public class CertificateDTO {
         this.endDate = x509cer.getNotAfter();
         this.keyUsages = keyUsages;
         this.extendedKeyUsages = extendedKeyUsages;
-        if(x509cer.getBasicConstraints() == -1){
-            this.certificateType = CertificateType.END_ENTITY_CERTIFICATE;
-        }else{
-            //TODO: na ovaj nacin mozemo znati dal ima pravo CA, ali ne mozemo znati dal je root
-            this.certificateType = CertificateType.CA_CERTIFICATE;
-        }
+        this.certificateType = certificateType;
 
     }
 }
