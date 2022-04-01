@@ -23,7 +23,7 @@ export class AdminHomePageComponent implements OnInit {
   issuer:any;
   expirationDate:any;
   rootCertDTO:rootCertificateDTO= {
-    email:'',
+    adminMail:'',
     startDate:new Date(),
     endDate:new Date(),
     keyUsages:[],
@@ -126,7 +126,7 @@ export class AdminHomePageComponent implements OnInit {
   }
 
   makeRootCertificate(){   
-    this.rootCertDTO.email = localStorage.getItem('mail');
+    this.rootCertDTO.adminMail = localStorage.getItem('mail');
     this.adminService.addRootCertificate(this.rootCertDTO);
   }
 
