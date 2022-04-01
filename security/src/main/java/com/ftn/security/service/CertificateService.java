@@ -2,6 +2,7 @@ package com.ftn.security.service;
 
 import com.ftn.security.converter.ExtendedKeyUsageConverter;
 import com.ftn.security.converter.KeyUsageConverter;
+import com.ftn.security.dto.CertificateDTO;
 import com.ftn.security.dto.CreateCertificateDto;
 import com.ftn.security.dto.CreateRootCertificateDto;
 import com.ftn.security.keystores.KeyStoreReader;
@@ -51,14 +52,21 @@ public class CertificateService {
 
     }
 
-    public ArrayList<X509Certificate> getAllUserCertificates(String name) {
-        ArrayList<X509Certificate> allUserCertificates = new ArrayList<X509Certificate>();
-
+    public ArrayList<X509Certificate> getCertificatesByEmail(String email){
         KeyStoreReader keyStoreReader = new KeyStoreReader();
-        allUserCertificates.addAll(keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS, name));
-        allUserCertificates.addAll(keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.END_ENTITY_STORE_NAME, KeyStoreData.END_ENTITY_STORE_PASS, name));
+        ArrayList<X509Certificate> certificates = new ArrayList<X509Certificate>();
+        certificates.addAll(keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.ROOT_STORE_NAME, KeyStoreData.ROOT_STORE_PASS, email));
+        certificates.addAll(keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS, email));
+        certificates.addAll(keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.END_ENTITY_STORE_NAME, KeyStoreData.END_ENTITY_STORE_PASS, email));
+        return certificates;
+    }
 
-        return allUserCertificates;
+    public ArrayList<CertificateDTO> getAllUserCertificatesDTO(String name) {
+        ArrayList<CertificateDTO> allUserCertificatesDTO = new ArrayList<CertificateDTO>();
+        for(X509Certificate x509cer : getCertificatesByEmail(name)){
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>()));
+        }
+        return allUserCertificatesDTO;
     }
 
     //TODO uraditi provjeru da li issuer moze da izda sertifikat(datum vazenja validan,mozda provjera da li ima odredjene ekstenzije...)
