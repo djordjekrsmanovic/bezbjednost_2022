@@ -8,10 +8,6 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   constructor(private router: Router){}
-
-  goToAdminPg(){
-    this.router.navigate(['/admin']);
-  }
   
   title = 'SecurityFrontendApp';
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from './admin-service';
 import { saveAs } from 'file-saver'
+import { rootCertificateDTO } from '../dto-interfaces/rootCertificateDTO';
 
 @Component({
   selector: 'app-admin-home-page',
@@ -20,6 +21,15 @@ export class AdminHomePageComponent implements OnInit {
   user:any;
   issuer:any;
   expirationDate:any;
+  rootCertDTO:rootCertificateDTO= {
+    email:'',
+    startDate:new Date(),
+    endDate:new Date(),
+    keyUsages:[],
+    extendedKeyUsages:[]
+  }
+  keyUsagebool:boolean=false;
+  extKeyUsagebool:boolean=false;
 
   selectOtherCertTab(){
     this.otherCertTab=true;
@@ -82,7 +92,6 @@ export class AdminHomePageComponent implements OnInit {
   downloadCertificate(){
     this.adminService.downloadCertificate().subscribe(blob =>saveAs(blob, 'certificate.cer'))
   }
-
 
   ngOnInit(): void {
 
