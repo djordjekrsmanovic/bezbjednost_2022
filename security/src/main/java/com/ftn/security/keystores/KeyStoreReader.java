@@ -12,6 +12,9 @@ import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class KeyStoreReader {
     private KeyStore keyStore;
@@ -125,5 +128,32 @@ public class KeyStoreReader {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public ArrayList<X509Certificate> getAllCertificatesBySubjectEmail(String keyStoreFile, String keyStorePass, String subjectEmail) {
+
+        ArrayList<X509Certificate> allCertificatesBySubject = new ArrayList<X509Certificate>();
+
+        KeyStore ks = null;
+        try {
+            ks = KeyStore.getInstance("JKS", "SUN");
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(keyStoreFile));
+            ks.load(in, keyStorePass.toCharArray());
+
+            List<String> aliases = Collections.list(ks.aliases());
+            for(String alias : aliases){
+                if (ks.isKeyEntry(alias)) {
+                    X509Certificate certificate = (X509Certificate)ks.getCertificate(alias);
+                    if(certificate.getSubjectDN().getName().equals(subjectEmail)){
+                        allCertificatesBySubject.add(certificate);
+                    }
+                }
+            }
+
+        } catch (KeyStoreException | NoSuchProviderException | CertificateException | IOException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return allCertificatesBySubject;
     }
 }

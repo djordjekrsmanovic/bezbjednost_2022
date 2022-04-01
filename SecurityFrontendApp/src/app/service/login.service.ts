@@ -24,9 +24,9 @@ export class LoginService {
     console.log(this.user);
     localStorage.setItem('currentUser', JSON.stringify(this.user));
     if (this.user.role === 'ADMIN') {
-      window.location.href = '/adminHome';
+      window.location.href = '/admin';
     } else if (this.user.role === 'USER') {
-      window.location.href = '/clientHome';
+      window.location.href = '/client';
     } else {
       window.location.href = '/'; 
     }

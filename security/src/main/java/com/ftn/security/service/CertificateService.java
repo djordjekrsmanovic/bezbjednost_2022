@@ -3,6 +3,7 @@ package com.ftn.security.service;
 import com.ftn.security.converter.ExtendedKeyUsageConverter;
 import com.ftn.security.converter.KeyUsageConverter;
 import com.ftn.security.dto.CreateRootCertificateDto;
+import com.ftn.security.keystores.KeyStoreReader;
 import com.ftn.security.keystores.KeyStoreWriter;
 import com.ftn.security.model.Client;
 import com.ftn.security.model.IssuerData;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 
 @RequiredArgsConstructor
 @Service
@@ -45,4 +47,15 @@ public class CertificateService {
 
     }
 
+
+
+    public ArrayList<X509Certificate> getAllUserCertificates(String name) {
+        ArrayList<X509Certificate> allUserCertificates = new ArrayList<X509Certificate>();
+
+        KeyStoreReader keyStoreReader = new KeyStoreReader();
+        allUserCertificates.addAll(keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS, name));
+        allUserCertificates.addAll(keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.END_ENTITY_STORE_NAME, KeyStoreData.END_ENTITY_STORE_PASS, name));
+
+        return allUserCertificates;
+    }
 }
