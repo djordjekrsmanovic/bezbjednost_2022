@@ -3,6 +3,7 @@ package com.ftn.security.converter;
 import com.ftn.security.model.KeyUsage;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -34,5 +35,15 @@ public class KeyUsageConverter {
         }
 
         return null;
+    }
+
+    public List<KeyUsage> getKeyUsageFromBooleanArr(boolean[] keyUsageBool){
+        List<KeyUsage> keyUsages = new ArrayList<KeyUsage>();
+        for(int i = 0; i <= 8; i++){
+            if(keyUsageBool[i]){
+               keyUsages.add(KeyUsage.fromInteger(i));
+            }
+        }
+        return keyUsages;
     }
 }

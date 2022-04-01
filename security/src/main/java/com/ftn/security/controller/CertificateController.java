@@ -1,5 +1,6 @@
 package com.ftn.security.controller;
 
+import com.ftn.security.dto.CertificateDTO;
 import com.ftn.security.dto.CreateCertificateDto;
 import com.ftn.security.dto.CreateRootCertificateDto;
 import com.ftn.security.service.CertificateService;
@@ -39,9 +40,9 @@ public class CertificateController {
 
     //@PreAuthorize("hasRole('USER')")
     @GetMapping("/getAllUserCertificates")
-    public ResponseEntity<ArrayList<X509Certificate>> getAllUserCertificates(Principal user){
+    public ResponseEntity<ArrayList<CertificateDTO>> getAllUserCertificates(Principal user){
         System.out.println("USER: " + user.getName());
-        return new ResponseEntity<ArrayList<X509Certificate>>(certificateService.getAllUserCertificates(user.getName()), HttpStatus.OK);
+        return new ResponseEntity<ArrayList<CertificateDTO>>(certificateService.getAllUserCertificatesDTO(user.getName()), HttpStatus.OK);
     }
 
 }
