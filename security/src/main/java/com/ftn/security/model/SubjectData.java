@@ -19,7 +19,7 @@ public class SubjectData {
 
     private PublicKey publicKey;
     private X500Name x500name;
-    private Long serialNumber;
+    private String serialNumber;
     private Date startDate;
     private Date endDate;
     private Integer[] keyUsage;

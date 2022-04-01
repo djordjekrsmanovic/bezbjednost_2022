@@ -156,4 +156,26 @@ public class KeyStoreReader {
 
         return allCertificatesBySubject;
     }
+
+    public KeyStore getKeyStore(String keyStoreName,String keyStorePassword){
+        try {
+            KeyStore keyStore=KeyStore.getInstance("JKS","SUN");
+            BufferedInputStream inputStream=new BufferedInputStream(new FileInputStream(keyStoreName));
+            keyStore.load(inputStream,keyStorePassword.toCharArray());
+            return keyStore;
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (NoSuchProviderException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

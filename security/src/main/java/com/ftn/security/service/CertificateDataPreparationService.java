@@ -49,17 +49,14 @@ public class CertificateDataPreparationService {
 
             //Postavljaju se podaci za generisanje sertifiakta
             X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerData.getX500name(),
-                    new BigInteger(subjectData.getSerialNumber().toString()),
+                    new BigInteger(subjectData.getSerialNumber()),
                     subjectData.getStartDate(),
                     subjectData.getEndDate(),
                     subjectData.getX500name(),
                     subjectData.getPublicKey());
 
             certGen.addExtension(Extension.keyUsage,false,new KeyUsage(subjectData.getNumberFromKeyUsage()));
-            KeyPurposeId[] keyPurposeIds=new KeyPurposeId[3];
-            keyPurposeIds[0]=KeyPurposeId.id_kp_codeSigning;
-            keyPurposeIds[1]=KeyPurposeId.anyExtendedKeyUsage;
-            keyPurposeIds[2]=KeyPurposeId.id_kp_clientAuth;
+
             certGen.addExtension(Extension.extendedKeyUsage,false,new ExtendedKeyUsage(subjectData.getExtendedKeyUsage()));
             //Generise se sertifikat
             X509CertificateHolder certHolder = certGen.build(contentSigner);
@@ -117,9 +114,9 @@ public class CertificateDataPreparationService {
         return new IssuerData(issuerKey, builder.build());
     }
 
-    SubjectData generateSubjectData(KeyPair keyPairSubject, Client client, Date startDate, Date endDate, Integer[] keyUsage, KeyPurposeId[] extendedKeyUsage, CertificateService certificateService){
+    SubjectData generateSubjectData(KeyPair keyPairSubject, Client client, Date startDate, Date endDate, Integer[] keyUsage, KeyPurposeId[] extendedKeyUsage){
         //Serijski broj sertifikata
-        Long certificateSerialNumber= generateCertificateSerialNumber();
+        String certificateSerialNumber= generateCertificateSerialNumber();
         //klasa X500NameBuilder pravi X500Name objekat koji predstavlja podatke o vlasniku
         X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
         builder.addRDN(BCStyle.CN, client.getCommonName());
@@ -149,10 +146,11 @@ public class CertificateDataPreparationService {
 
     }
 
-    private Long generateCertificateSerialNumber(){
+    private String generateCertificateSerialNumber(){
         try {
             Random random = SecureRandom.getInstance("SHA1PRNG", "SUN");
-            return random.nextLong();
+            Long number=random.nextLong();
+            return number.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (NoSuchProviderException e) {

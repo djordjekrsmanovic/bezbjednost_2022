@@ -1,8 +1,10 @@
 package com.ftn.security.controller;
 
+import com.ftn.security.dto.CreateCertificateDto;
 import com.ftn.security.dto.CreateRootCertificateDto;
 import com.ftn.security.service.CertificateService;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +25,11 @@ public class CertificateController {
     @PostMapping("/add-root-certificate")
     public void addRootCertificate(@RequestBody  CreateRootCertificateDto dto){
         certificateService.createRootCertificate(dto);
+    }
+
+    @PostMapping("/add-certificate")
+    public void addCertificate(@RequestBody CreateCertificateDto dto){
+        certificateService.createCertificate(dto);
     }
 
     @GetMapping("/get")
