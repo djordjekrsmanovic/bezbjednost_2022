@@ -144,7 +144,7 @@ public class KeyStoreReader {
             for(String alias : aliases){
                 if (ks.isKeyEntry(alias)) {
                     X509Certificate certificate = (X509Certificate)ks.getCertificate(alias);
-                    if(certificate.getSubjectDN().getName().equals(subjectEmail)){
+                    if(getEmailFromCertificate(certificate).equals(subjectEmail)){
                         allCertificatesBySubject.add(certificate);
                     }
                 }
@@ -155,6 +155,15 @@ public class KeyStoreReader {
         }
 
         return allCertificatesBySubject;
+    }
+
+    private String getEmailFromCertificate(X509Certificate certificate){
+        for(String certPart : certificate.getSubjectDN().getName().split(",")){
+            if(certPart.contains("EMAILADDRESS")){
+                return certPart.split("=")[1];
+            }
+        }
+        return "err";
     }
 
     public KeyStore getKeyStore(String keyStoreName,String keyStorePassword){
