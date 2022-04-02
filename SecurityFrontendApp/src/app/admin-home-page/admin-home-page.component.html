@@ -205,6 +205,29 @@
     </button> 
 </div>
 
+<div *ngIf='revocationReasonFlag'>
+  <h3 style="margin-left: 70px;" >Pick revocation reason:</h3>
+  <div class="input-group" style="margin-left:28%;">
+    <div style="display: flex; flex-flow: column wrap;">
+    <label for=""><input type="radio" name="rrbtn" id="cb1" (click)="addRevocReason('KEY_COMPROMISE')"> Key compromise</label>
+    <label for=""><input type="radio" name="rrbtn" id="cb2" (click)="addRevocReason('CA_COMPROMISE')"> CA compromise</label>
+    <label for=""><input type="radio" name="rrbtn" id="cb3" (click)="addRevocReason('AFFILATION_CHANGED')"> Affilation changed</label> 
+    <label for=""><input type="radio" name="rrbtn" id="cb1" (click)="addRevocReason('SUPERSEDED')"> Superseded</label>
+    <label for=""><input type="radio" name="rrbtn" id="cb2" (click)="addRevocReason('CESSATION_OF_OPERATION')"> Cessation of operation</label>
+    <label for=""><input type="radio" name="rrbtn" id="cb3" (click)="addRevocReason('CERTIFICATE_HOLD')"> Certificate hold</label> 
+    <label for=""><input type="radio" name="rrbtn" id="cb1" (click)="addRevocReason('REMOVE_FROM_CRL')"> Remove from CRL</label>
+    <label for=""><input type="radio" name="rrbtn" id="cb2" (click)="addRevocReason('UNSPECIFIED')"> Unspecified</label>
+    </div>    
+</div>
+<button type="button" class="btn btn-primary" style="margin-right: 20px; margin-left: 60%;" (click)="revokeCertificate()">
+  Revoke
+</button>
+<button type="button" class="btn btn-primary" (click)="revocationReasonFlag=false">
+  Cancel
+</button>
+<hr>
+</div>
+
 <!-- Pregled svih sertifikata -->
 <div class="container" *ngIf="allCertsTab">
     <button (click)="toggleFilters()" type="button" class="btn btn-primary" aria-pressed="false" autocomplete="off">Filters</button>
@@ -242,7 +265,7 @@
             <td>{{cert.subjectData.email}}</td>
             <td>{{cert.issuerData.email}}</td>
             <td>
-                <button type="button" class="btn btn-primary">
+                <button type="button" class="btn btn-primary" (click)="collectRevocationData(cert)">
                     Revoke
                 </button>
             </td>
