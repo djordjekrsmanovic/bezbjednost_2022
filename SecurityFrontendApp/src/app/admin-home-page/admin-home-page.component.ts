@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService } from './admin-service';
 import { saveAs } from 'file-saver'
 import { rootCertificateDTO } from '../dto-interfaces/rootCertificateDTO';
+import { AuthenticationResponse } from '../model/AuthenticationResponse';
 
 @Component({
   selector: 'app-admin-home-page',
@@ -22,7 +23,7 @@ export class AdminHomePageComponent implements OnInit {
   issuer:any;
   expirationDate:any;
   rootCertDTO:rootCertificateDTO= {
-    email:'',
+    adminMail:'',
     startDate:new Date(),
     endDate:new Date(),
     keyUsages:[],
@@ -81,6 +82,16 @@ export class AdminHomePageComponent implements OnInit {
     }
   }
   
+  keyUsageCBoxes(){
+    this.extKeyUsagebool=false
+    this.keyUsagebool=true
+  }
+
+  keyUsageExtCBoxes(){
+    this.keyUsagebool=false;
+    this.extKeyUsagebool=true
+  }
+
   selectUser(){
 
   }
@@ -91,6 +102,32 @@ export class AdminHomePageComponent implements OnInit {
 
   downloadCertificate(){
     this.adminService.downloadCertificate().subscribe(blob =>saveAs(blob, 'certificate.cer'))
+  }
+
+  addKeyExt(extension:string){
+    if(this.rootCertDTO.keyUsages.find(x => x===extension)){      
+      this.rootCertDTO.keyUsages.forEach((el, index) => {if (el===extension){
+        this.rootCertDTO.keyUsages.splice(index,1)        
+      }})
+      return;
+    }   
+    this.rootCertDTO.keyUsages.push(extension)
+    
+  }
+
+  addKeyExtExtended(extension:string){
+    if(this.rootCertDTO.extendedKeyUsages.find(x => x===extension)){      
+      this.rootCertDTO.extendedKeyUsages.forEach((el, index) => {if (el===extension){
+        this.rootCertDTO.extendedKeyUsages.splice(index,1)        
+      }})
+      return;
+    }  
+    this.rootCertDTO.extendedKeyUsages.push(extension)
+  }
+
+  makeRootCertificate(){   
+    this.rootCertDTO.adminMail = localStorage.getItem('mail');
+    this.adminService.addRootCertificate(this.rootCertDTO);
   }
 
   ngOnInit(): void {

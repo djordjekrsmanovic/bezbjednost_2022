@@ -23,6 +23,7 @@ export class LoginService {
     this.user = activeUser;
     console.log(this.user);
     localStorage.setItem('currentUser', JSON.stringify(this.user));
+    localStorage.setItem('mail', this.user.mail);
     if (this.user.role === 'ADMIN') {
       window.location.href = '/admin';
     } else if (this.user.role === 'USER') {
