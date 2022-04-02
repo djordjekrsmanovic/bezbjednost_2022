@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import { rootCertificateDTO } from '../dto-interfaces/rootCertificateDTO';
+import { CertificateDTO } from '../model/CertificateDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -31,6 +32,10 @@ import { rootCertificateDTO } from '../dto-interfaces/rootCertificateDTO';
       const body=JSON.stringify(dto) 
       this.http.post('http://localhost:8080/api/certificates/add-root-certificate',body,{'headers': headers}).subscribe(data=>console.log(data)
       );
+    }
+
+    getAllCertificates(): Observable<CertificateDTO[]> {
+      return this.http.get<CertificateDTO[]>('http://localhost:8080/api/certificates/getAllCertificates');
     }
 
   }

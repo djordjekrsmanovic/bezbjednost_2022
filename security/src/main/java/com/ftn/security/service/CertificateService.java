@@ -269,4 +269,19 @@ public class CertificateService {
     }
 
 
+    public ArrayList<CertificateDTO> getAllCertificates(){
+        KeyStoreReader keyStoreReader = new KeyStoreReader();
+        ArrayList<CertificateDTO> allUserCertificatesDTO = new ArrayList<CertificateDTO>();
+        for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.ROOT_STORE_NAME, KeyStoreData.ROOT_STORE_PASS)){
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
+        }
+        for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS)){
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.CA_CERTIFICATE));
+        }
+        for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.END_ENTITY_STORE_NAME, KeyStoreData.END_ENTITY_STORE_PASS)){
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.END_ENTITY_CERTIFICATE));
+        }
+        return allUserCertificatesDTO;
+    }
+
 }

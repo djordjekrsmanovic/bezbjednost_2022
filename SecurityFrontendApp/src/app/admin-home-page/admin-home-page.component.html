@@ -210,14 +210,14 @@
     <button (click)="toggleFilters()" type="button" class="btn btn-primary" aria-pressed="false" autocomplete="off">Filters</button>
     <div *ngIf="filtersCard">
     <div class="input-group" style="margin-left:28%;">
-        <div style="margin:15px; margin-right: 100px;">
-        <label for="">Expiration date:  <input type="date"></label>
-        </div>
         <div style="display: flex; flex-flow: column wrap;">
-        <label for=""><input type="checkbox" name="" id="" checked="true" onchange=""> Include root certificates</label>
-        <label for=""><input type="checkbox" name="" id="" checked="true" onchange=""> Include intermediary certificates</label>
-        <label for=""><input type="checkbox" name="" id="" checked="true" onchange=""> Include end-entity certificates</label>
+        <label for=""><input type="radio" name="rbtn" id="cb1" (click)="filter('root')"> Only root certificates</label>
+        <label for=""><input type="radio" name="rbtn" id="cb2" (click)="filter('ca')"> Only intermediary certificates</label>
+        <label for=""><input type="radio" name="rbtn" id="cb3" (click)="filter('ee')"> Only end-entity certificates</label> 
         </div>
+        <button type="button" class="btn btn-primary" style="margin-top: 20px; margin-left: 5%;" (click)="refreshList()">
+          Refresh List
+      </button>
     </div>
     <hr>
     </div>
@@ -227,36 +227,31 @@
     <table class="table">
         <thead class="thead-dark">
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
+            <th scope="col">Serial number</th>
+            <th scope="col">Certificate type</th>
+            <th scope="col">Issuer mail</th>
+            <th scope="col">Subject mail</th>
             <th scope="col">Revoke Certificate</th>
             <th scope="col">Details</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
+          <tr *ngFor="let cert of allCertificates">
+            <th scope="row">{{cert.serialNumber}}</th>
+            <td>{{cert.certificateType}}</td>
+            <td>{{cert.subjectData.email}}</td>
+            <td>{{cert.issuerData.email}}</td>
             <td>
                 <button type="button" class="btn btn-primary">
                     Revoke
                 </button>
             </td>
             <td>
-                <button type="button" class="btn btn-primary" (click)="toggleModal()">
+                <button type="button" class="btn btn-primary" (click)="openModal(cert)">
                     Details
                 </button>
             </td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-            <td>sff</td>
-          </tr>
+          </tr>         
         </tbody>
       </table>
     </div>     
@@ -264,21 +259,9 @@
 </div>
 
 <div *ngIf="toggleDetailWin"> 
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalCenterTitle">Certificate details</h5>
-        </div>
-        <div class="modal-body">
-          Issuer:
-          tralala
-          Subject:
-          tralala
-        </div>
-        <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="downloadCertificate()">Download Certificate</button>
-        <button type="button" class="btn btn-secondary" (click)="toggleModal()">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-certificate [certificate]="returnCertificateForView()"></app-certificate>
+  <hr>
+  <button type="button" class="btn btn-primary" style="margin-left: 5%;" (click)="closeModal()">
+    Close
+</button>
+</div>

@@ -50,5 +50,10 @@ public class CertificateController {
     public void revokeCertificate(@RequestBody RevokeCertificateDto revokeCertificateDto){
         certificateService.revokeCertificate(revokeCertificateDto);
     }
+    
+    @GetMapping("/getAllCertificates")
+    public ResponseEntity<ArrayList<CertificateDTO>> gettAllCertificates(){
+        return new ResponseEntity<ArrayList<CertificateDTO>>(certificateService.getAllCertificates(),HttpStatus.OK);
+    }
 
 }
