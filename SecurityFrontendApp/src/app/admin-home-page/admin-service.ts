@@ -4,6 +4,7 @@ import {HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import { rootCertificateDTO } from '../dto-interfaces/rootCertificateDTO';
 import { CertificateDTO } from '../model/CertificateDTO';
+import { revokeCertificateDTO } from '../dto-interfaces/revokeCertificateDTO';
 
 @Injectable({
     providedIn: 'root',
@@ -16,10 +17,10 @@ import { CertificateDTO } from '../model/CertificateDTO';
       
     }
 
-    revokeCertificate(serialNum:string){
+    revokeCertificate(dto:revokeCertificateDTO){
       const headers={'content-type':'application/json'};  
-      const body=JSON.stringify(serialNum) 
-        this.http.post('http://localhost:8080/revoke',body,{'headers': headers}).subscribe(data=>console.log(data)
+      const body=JSON.stringify(dto) 
+        this.http.post('http://localhost:8080/api/certificates/revoke-certificate',body,{'headers': headers}).subscribe(data=>console.log(data)
         );
     }
 

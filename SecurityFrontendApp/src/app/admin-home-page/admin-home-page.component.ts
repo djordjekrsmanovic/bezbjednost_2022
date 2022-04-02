@@ -3,6 +3,7 @@ import { AdminService } from './admin-service';
 import { saveAs } from 'file-saver'
 import { rootCertificateDTO } from '../dto-interfaces/rootCertificateDTO';
 import { CertificateDTO } from '../model/CertificateDTO';
+import { revokeCertificateDTO } from '../dto-interfaces/revokeCertificateDTO';
 
 
 @Component({
@@ -37,6 +38,14 @@ export class AdminHomePageComponent implements OnInit {
   filteredCertificates:CertificateDTO[]=[];
   allCertificatesReserve:CertificateDTO[]=[];
   filterCounter=0;
+
+  revokeCertDTO:revokeCertificateDTO={
+    certificateType:'',
+    subjectMail:'',
+    certificateSerialNumber:'',
+    reason:''
+  }
+  revocationReasonFlag:boolean=false;
 
   selectOtherCertTab(){
     this.otherCertTab=true;
@@ -177,6 +186,21 @@ export class AdminHomePageComponent implements OnInit {
     });
     this.allCertificates=this.filteredCertificates;
     }
+  }
+
+  addRevocReason(reason:string){
+    this.revokeCertDTO.reason=reason;
+  }
+
+  collectRevocationData(certificateDTO:CertificateDTO){
+    this.revocationReasonFlag=true;
+    this.revokeCertDTO.certificateSerialNumber=certificateDTO.serialNumber;
+    this.revokeCertDTO.certificateType=certificateDTO.certificateType;
+    this.revokeCertDTO.subjectMail=certificateDTO.subjectData.email;   
+  }
+
+  revokeCertificate(){
+    this.adminService.revokeCertificate(this.revokeCertDTO);
   }
 
   ngOnInit(): void {
