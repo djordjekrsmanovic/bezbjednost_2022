@@ -45,4 +45,9 @@ public class CertificateController {
         return new ResponseEntity<ArrayList<CertificateDTO>>(certificateService.getAllUserCertificatesDTO(user.getName()), HttpStatus.OK);
     }
 
+    @GetMapping("/getAllCertificates")
+    public ResponseEntity<ArrayList<CertificateDTO>> gettAllCertificates(){
+        return new ResponseEntity<ArrayList<CertificateDTO>>(certificateService.getAllCertificates(),HttpStatus.OK);
+    }
+
 }

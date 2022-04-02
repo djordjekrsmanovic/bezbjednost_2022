@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService } from './admin-service';
 import { saveAs } from 'file-saver'
 import { rootCertificateDTO } from '../dto-interfaces/rootCertificateDTO';
-import { AuthenticationResponse } from '../model/AuthenticationResponse';
+import { CertificateDTO } from '../model/CertificateDTO';
+
 
 @Component({
   selector: 'app-admin-home-page',
@@ -31,6 +32,9 @@ export class AdminHomePageComponent implements OnInit {
   }
   keyUsagebool:boolean=false;
   extKeyUsagebool:boolean=false;
+  allCertificates: CertificateDTO[]= [];
+  selectedCertificate:any;
+  
 
   selectOtherCertTab(){
     this.otherCertTab=true;
@@ -55,10 +59,11 @@ export class AdminHomePageComponent implements OnInit {
      this.filtersCard=false;
   }
 
-  toggleModal(){
-    if(this.toggleDetailWin===false)
-      this.toggleDetailWin=true;
-    else
+  openModal(cert:CertificateDTO){    
+    this.selectedCertificate=cert;  
+    this.toggleDetailWin=true;
+  }
+  closeModal(){       
      this.toggleDetailWin=false;
   }
 
@@ -130,8 +135,17 @@ export class AdminHomePageComponent implements OnInit {
     this.adminService.addRootCertificate(this.rootCertDTO);
   }
 
-  ngOnInit(): void {
+  loadCertificates(){
+    this.adminService.getAllCertificates().subscribe( (data) =>{this.allCertificates=data}, (error) => {console.log(error);
+    })
+  }
 
+  returnCertificateForView(): CertificateDTO{
+    return this.selectedCertificate;
+  }
+
+  ngOnInit(): void {
+    this.loadCertificates();
   }
 
 }

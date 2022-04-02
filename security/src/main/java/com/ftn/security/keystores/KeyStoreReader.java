@@ -187,4 +187,28 @@ public class KeyStoreReader {
         }
         return null;
     }
+
+    public ArrayList<X509Certificate> getAllCertificates(String keyStoreFile, String keyStorePass) {
+        ArrayList<X509Certificate> allCertificates = new ArrayList<X509Certificate>();
+
+        KeyStore ks = null;
+        try {
+            ks = KeyStore.getInstance("JKS", "SUN");
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(keyStoreFile));
+            ks.load(in, keyStorePass.toCharArray());
+
+            List<String> aliases = Collections.list(ks.aliases());
+            for(String alias : aliases){
+                if (ks.isKeyEntry(alias)) {
+                    X509Certificate certificate = (X509Certificate)ks.getCertificate(alias);
+                        allCertificates.add(certificate);
+                }
+            }
+
+        } catch (KeyStoreException | NoSuchProviderException | CertificateException | IOException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return allCertificates;
+    }
 }
