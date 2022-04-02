@@ -12,6 +12,9 @@ export class ClientHomePageComponent implements OnInit {
 
   certificates!: CertificateDTO[];
 
+  selectedCertificate!: CertificateDTO;
+  selectedCertificateBool: boolean = false;
+
   constructor(private clientService: ClientService, private route: Router) { }
 
   ngOnInit(): void {
@@ -22,8 +25,14 @@ export class ClientHomePageComponent implements OnInit {
     });
   }
 
-  selectedCertificate(): CertificateDTO{
-    return this.certificates[0];
+  showMoreInfo(cert: CertificateDTO): void {
+    this.selectedCertificate = cert;
+    this.selectedCertificateBool = true;
   }
+
+  closeShowMoreInfo(): void {
+    this.selectedCertificateBool = false;
+  }
+  
 
 }

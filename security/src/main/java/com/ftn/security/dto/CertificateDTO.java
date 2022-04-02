@@ -24,8 +24,9 @@ public class CertificateDTO {
     private List<KeyUsage> keyUsages;
     private List<ExtendedKeyUsage> extendedKeyUsages;
     private CertificateType certificateType;
+    private boolean isRevoked;
 
-    public CertificateDTO(X509Certificate x509cer, List<KeyUsage> keyUsages, List<ExtendedKeyUsage> extendedKeyUsages, CertificateType certificateType) {
+    public CertificateDTO(X509Certificate x509cer, boolean isRevoked, List<KeyUsage> keyUsages, List<ExtendedKeyUsage> extendedKeyUsages, CertificateType certificateType) {
         this.subjectData = new InformationData(x509cer.getSubjectDN().getName());
         this.issuerData = new InformationData(x509cer.getIssuerDN().getName());
         this.serialNumber = x509cer.getSerialNumber().toString();
@@ -34,6 +35,7 @@ public class CertificateDTO {
         this.keyUsages = keyUsages;
         this.extendedKeyUsages = extendedKeyUsages;
         this.certificateType = certificateType;
+        this.isRevoked = isRevoked;
 
     }
 }

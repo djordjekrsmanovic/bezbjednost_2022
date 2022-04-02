@@ -2,11 +2,44 @@
     <div class="row" style="margin-top: 20px;">
         <h2 class="text-center">All your Certificates</h2>
     </div>
-    <div class="row" style="background-color: gainsboro;">
-        Tabela TODO
+    <div class="row">
+        <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Serial number</th>
+                <th scope="col">Certificate type</th>
+                <th scope="col">Issuer mail</th>
+                <th scope="col">Subject mail</th>
+                <th scope="col">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cert of certificates">
+                <th scope="row">{{cert.serialNumber}}</th>
+                <td>{{cert.certificateType}}</td>
+                <td>{{cert.subjectData.email}}</td>
+                <td>{{cert.issuerData.email}}</td>
+                <td>
+                    <button type="button" class="btn btn-secondary" (click)="showMoreInfo(cert)">
+                        Details
+                    </button>
+                </td>
+              </tr>         
+            </tbody>
+          </table>
     </div>
     <br> <br>
     <div class="row">
-        <app-certificate [certificate]="selectedCertificate()"></app-certificate>
+        <div *ngIf="selectedCertificateBool">
+            <app-certificate [certificate]="selectedCertificate"></app-certificate>
+        </div>
+    </div>
+    <div class="row" *ngIf="selectedCertificateBool">
+        <div class="col m-1">
+            <div class="d-flex flex-row-reverse">
+                <button class="btn btn-secondary m-1" (click)="closeShowMoreInfo()">Close</button>
+                <button class="btn btn-primary m-1" (click)="closeShowMoreInfo()">Download</button>
+            </div>
+        </div>
     </div>
 </div>

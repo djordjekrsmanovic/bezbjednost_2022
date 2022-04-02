@@ -65,14 +65,15 @@ public class CertificateService {
     public ArrayList<CertificateDTO> getAllUserCertificatesDTO(String name) {
         KeyStoreReader keyStoreReader = new KeyStoreReader();
         ArrayList<CertificateDTO> allUserCertificatesDTO = new ArrayList<CertificateDTO>();
+        //TODO: dodati poziv metode za proveru da li je sertifikat revoked ili ne za sada su svi false
         for(X509Certificate x509cer : keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.ROOT_STORE_NAME, KeyStoreData.ROOT_STORE_PASS, name)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer, false, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
         }
         for(X509Certificate x509cer : keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS, name)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.CA_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer, false, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.CA_CERTIFICATE));
         }
         for(X509Certificate x509cer : keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.END_ENTITY_STORE_NAME, KeyStoreData.END_ENTITY_STORE_PASS, name)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.END_ENTITY_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer, false, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.END_ENTITY_CERTIFICATE));
         }
         return allUserCertificatesDTO;
     }

@@ -1,0 +1,15 @@
+.img-revoked{
+    width: 50%;
+    height: 50%;
+}
+
+.img-certificate{
+    width: 50%;
+}
+
+.parallelogram {
+	width: 100px;
+	height: 50px;
+	transform: skew(20deg);
+	background: #555;
+}

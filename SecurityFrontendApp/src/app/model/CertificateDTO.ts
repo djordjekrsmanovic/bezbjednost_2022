@@ -11,6 +11,7 @@ export class CertificateDTO {
     extendedKey: string[];
     extendedKeyUsages: string[];
     certificateType: string;
+    isRevoked: boolean;
 
     constructor(subjectData: InformationData,
                 issuerData: InformationData,
@@ -20,7 +21,8 @@ export class CertificateDTO {
                 keyUsages: string[],
                 extendedKey: string[],
                 extendedKeyUsages: string[],
-                certificateType: string)
+                certificateType: string,
+                isRevoked: boolean)
     {
         this.subjectData = subjectData;
         this.issuerData = issuerData;
@@ -31,6 +33,7 @@ export class CertificateDTO {
         this.extendedKey = extendedKey;
         this.extendedKeyUsages = extendedKeyUsages;
         this.certificateType = certificateType;
+        this.isRevoked = isRevoked;
         
     }
 
