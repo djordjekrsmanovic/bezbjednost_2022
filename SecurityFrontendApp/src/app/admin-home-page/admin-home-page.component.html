@@ -210,14 +210,14 @@
     <button (click)="toggleFilters()" type="button" class="btn btn-primary" aria-pressed="false" autocomplete="off">Filters</button>
     <div *ngIf="filtersCard">
     <div class="input-group" style="margin-left:28%;">
-        <div style="margin:15px; margin-right: 100px;">
-        <label for="">Expiration date:  <input type="date"></label>
-        </div>
         <div style="display: flex; flex-flow: column wrap;">
-        <label for=""><input type="checkbox" name="" id="" checked="true" onchange=""> Include root certificates</label>
-        <label for=""><input type="checkbox" name="" id="" checked="true" onchange=""> Include intermediary certificates</label>
-        <label for=""><input type="checkbox" name="" id="" checked="true" onchange=""> Include end-entity certificates</label>
+        <label for=""><input type="radio" name="rbtn" id="cb1" (click)="filter('root')"> Only root certificates</label>
+        <label for=""><input type="radio" name="rbtn" id="cb2" (click)="filter('ca')"> Only intermediary certificates</label>
+        <label for=""><input type="radio" name="rbtn" id="cb3" (click)="filter('ee')"> Only end-entity certificates</label> 
         </div>
+        <button type="button" class="btn btn-primary" style="margin-top: 20px; margin-left: 5%;" (click)="refreshList()">
+          Refresh List
+      </button>
     </div>
     <hr>
     </div>

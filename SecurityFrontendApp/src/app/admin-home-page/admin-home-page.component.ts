@@ -34,7 +34,9 @@ export class AdminHomePageComponent implements OnInit {
   extKeyUsagebool:boolean=false;
   allCertificates: CertificateDTO[]= [];
   selectedCertificate:any;
-  
+  filteredCertificates:CertificateDTO[]=[];
+  allCertificatesReserve:CertificateDTO[]=[];
+  filterCounter=0;
 
   selectOtherCertTab(){
     this.otherCertTab=true;
@@ -136,12 +138,45 @@ export class AdminHomePageComponent implements OnInit {
   }
 
   loadCertificates(){
-    this.adminService.getAllCertificates().subscribe( (data) =>{this.allCertificates=data}, (error) => {console.log(error);
+    this.adminService.getAllCertificates().subscribe( (data) =>{this.allCertificates=data; this.allCertificatesReserve=data}, (error) => {console.log(error);
     })
   }
 
   returnCertificateForView(): CertificateDTO{
     return this.selectedCertificate;
+  }
+
+  refreshList(){
+    this.allCertificates=this.allCertificatesReserve;
+  }
+
+  filter(criteria:string){
+    
+    this.allCertificates=this.allCertificatesReserve;
+     
+    this.filteredCertificates=[]
+    if(criteria==='root'){
+      this.allCertificates.forEach((element, index) => {
+          if(element.certificateType==='ROOT_CERTIFICATE'){
+            this.filteredCertificates.push(this.allCertificates[index])            
+          }
+      });
+      this.allCertificates=this.filteredCertificates;
+    } else if(criteria==='ca'){
+      this.allCertificates.forEach((element, index) => {
+        if(element.certificateType==='CA_CERTIFICATE'){
+          this.filteredCertificates.push(this.allCertificates[index])  
+        }
+    });
+    this.allCertificates=this.filteredCertificates;
+    } else {
+      this.allCertificates.forEach((element, index) => {
+        if( element.certificateType==='END_ENTITY_CERTIFICATE'){
+          this.filteredCertificates.push(this.allCertificates[index])  
+        }
+    });
+    this.allCertificates=this.filteredCertificates;
+    }
   }
 
   ngOnInit(): void {
