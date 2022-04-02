@@ -20,6 +20,7 @@ import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Date;
 
 @RequiredArgsConstructor
 @Service
@@ -95,6 +96,12 @@ public class CertificateService {
 
         SubjectData subjectData=certificateDataPreparationService.generateSubjectData(subjectKeyPair,subject,dto.getStartDate(),dto.getEndDate(),subjectKeyUsages,subjectExtendedKeyUsages);
         IssuerData issuerData=certificateDataPreparationService.generateIssuerData(issuerPrivateKey,issuer);
+
+        if(!issuerCanCreateCertificate(dto.getIssuerCertificateSerialNumber())){
+            System.out.println("Error: createCertificate: issuer can not create certificate");
+            return;
+        }
+
         X509Certificate certificate= certificateDataPreparationService.generateCertificate(subjectData,issuerData);
 
         Certificate[] certificateChain=createCertificateChain(dto.getIssuerCertificateType(),dto.getIssuerCertificateSerialNumber()+dto.getIssuerMail(),certificate);
@@ -109,6 +116,62 @@ public class CertificateService {
             keyStoreWriter.saveKeyStore(KeyStoreData.END_ENTITY_STORE_NAME,KeyStoreData.END_ENTITY_STORE_PASS.toCharArray());
         }
 
+    }
+
+    public boolean issuerCanCreateCertificate(String issuerSerialNumber){
+        X509Certificate issuerX509Certificate = getX509CertificateBySerialNumber(issuerSerialNumber);
+
+        // mora da postoji
+        if(issuerX509Certificate == null){
+            System.out.println("Error: issuerCrtificate is not found");
+            return false;
+        }
+
+        // mora biti root ili CA
+        if(issuerX509Certificate.getBasicConstraints() == -1){
+            System.out.println("Error: issuerCrtificate is not CA");
+            return false;
+        }
+
+        if(!certificateIsValid(issuerX509Certificate)){
+            return false;
+        }
+
+        // sve provere su ispunjene
+        return true;
+    }
+
+    public boolean certificateIsValid(X509Certificate x509){
+        // ne sme da istekne period vazenja
+        if(x509.getNotAfter().before(new Date())){
+            System.out.println("Error: issuerCrtificate expired");
+            return false;
+        }
+
+        // ne sme biti revoked
+        if(false){ //TODO: provera da li je sertifikat reovek
+            System.out.println("Error: issuerCrtificate is revoked");
+            return false;
+        }
+
+        return true;
+    }
+
+    public X509Certificate getX509CertificateBySerialNumber(String serialNumber){
+        KeyStoreReader keyStoreReader = new KeyStoreReader();
+        X509Certificate certificate = null;
+        certificate = keyStoreReader.getCertificatesBySerialNumber(KeyStoreData.ROOT_STORE_NAME, KeyStoreData.ROOT_STORE_PASS, serialNumber);
+        if(certificate != null)
+            return certificate;
+        certificate = keyStoreReader.getCertificatesBySerialNumber(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS, serialNumber);
+        if(certificate != null)
+            return certificate;
+        certificate = keyStoreReader.getCertificatesBySerialNumber(KeyStoreData.END_ENTITY_STORE_NAME, KeyStoreData.END_ENTITY_STORE_PASS, serialNumber);
+        if(certificate != null)
+            return certificate;
+
+        // sertifikat nije pronadjen ni u jednom keystoru
+        return null;
     }
 
     private PrivateKey readCertificatePrivateKey(CertificateType certificateType,String alias){

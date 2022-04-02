@@ -8,6 +8,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -183,6 +184,29 @@ public class KeyStoreReader {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public X509Certificate getCertificatesBySerialNumber(String keyStoreFile, String keyStorePass, String serialNumber) {
+        KeyStore ks = null;
+        try {
+            ks = KeyStore.getInstance("JKS", "SUN");
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(keyStoreFile));
+            ks.load(in, keyStorePass.toCharArray());
+
+            List<String> aliases = Collections.list(ks.aliases());
+            for(String alias : aliases){
+                if (ks.isKeyEntry(alias)) {
+                    X509Certificate certificate = (X509Certificate)ks.getCertificate(alias);
+                    if(certificate.getSerialNumber().toString().equals(serialNumber)){
+                        return certificate;
+                    }
+                }
+            }
+
+        } catch (KeyStoreException | NoSuchProviderException | CertificateException | IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return null;
