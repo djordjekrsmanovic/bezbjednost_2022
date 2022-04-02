@@ -5,6 +5,7 @@ import com.ftn.security.converter.KeyUsageConverter;
 import com.ftn.security.dto.CertificateDTO;
 import com.ftn.security.dto.CreateCertificateDto;
 import com.ftn.security.dto.CreateRootCertificateDto;
+import com.ftn.security.dto.RevokeCertificateDto;
 import com.ftn.security.keystores.KeyStoreReader;
 import com.ftn.security.keystores.KeyStoreWriter;
 import com.ftn.security.model.*;
@@ -13,25 +14,26 @@ import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.*;
 @RequiredArgsConstructor
-@Service
 public class CertificateService {
 
     private final CertificateDataPreparationService certificateDataPreparationService;
     private final ClientService clientService;
     private final KeyUsageConverter keyUsageConverter;
     private final ExtendedKeyUsageConverter extendedKeyUsageConverter;
+    private final RevokeCertificateService revokeCertificateService;
 
 
+    //todo provjeriti da li je uneseni datum validan
     public void createRootCertificate(CreateRootCertificateDto dto){
         Client admin=clientService.getClientByMail(dto.getAdminMail());
 
@@ -218,5 +220,52 @@ public class CertificateService {
         }
         return keyStore;
     }
+
+    public void revokeCertificate(RevokeCertificateDto dto){
+
+        KeyStore rootKeyStore=getKeyStoreByCertificateType(CertificateType.ROOT_CERTIFICATE);
+        KeyStore caKeyStore=getKeyStoreByCertificateType(CertificateType.CA_CERTIFICATE);
+        KeyStore endEntityKeyStore=getKeyStoreByCertificateType(CertificateType.END_ENTITY_CERTIFICATE);
+        if(dto.getCertificateType()==CertificateType.ROOT_CERTIFICATE){ //if certificate type is root certificate we must check every key store and revoke certificates in chain
+            revokeByCertificateStore(rootKeyStore,dto.getCertificateSerialNumber(),dto.getReason());
+            revokeByCertificateStore(caKeyStore,dto.getCertificateSerialNumber(),dto.getReason());
+            revokeByCertificateStore(endEntityKeyStore,dto.getCertificateSerialNumber(),dto.getReason());
+        }else if(dto.getCertificateType()==CertificateType.CA_CERTIFICATE){ //if certificate type is ca we must only check ca key store and end entity key store
+            revokeByCertificateStore(caKeyStore,dto.getCertificateSerialNumber(),dto.getReason());
+            revokeByCertificateStore(endEntityKeyStore,dto.getCertificateSerialNumber(),dto.getReason());
+        }else if(dto.getCertificateType()==CertificateType.END_ENTITY_CERTIFICATE){ //if certificate type is end-entity we must only check end entity key store
+            revokeByCertificateStore(endEntityKeyStore,dto.getCertificateSerialNumber(),dto.getReason());
+        }
+    }
+
+    public void revokeByCertificateStore(KeyStore keyStore,String serialNumber,CertificateRevocationReason reason){
+        List<String> aliases= null;
+        try {
+            aliases = Collections.list(keyStore.aliases());
+            for(String alias:aliases){
+                revokeCertificateChain(keyStore.getCertificateChain(alias),serialNumber,reason);
+            }
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void revokeCertificateChain(Certificate[] certificateChain,String serialNumber,CertificateRevocationReason reason) {
+        int i=certificateChain.length-1;
+        for(;i>=0;i--){
+            if(((X509Certificate)certificateChain[i]).getSerialNumber().equals(new BigInteger(serialNumber))){
+                revokeCertificateService.revokeCertificate(serialNumber,reason);
+                i--;
+                break;
+            }
+        }
+        for(;i>=0;i--){
+            revokeCertificateService.revokeCertificate(((X509Certificate)certificateChain[i]).getSerialNumber().toString(),reason);
+        }
+
+
+    }
+
 
 }

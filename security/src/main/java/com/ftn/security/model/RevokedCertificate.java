@@ -3,11 +3,9 @@ package com.ftn.security.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -18,9 +16,10 @@ public class RevokedCertificate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long certificateSerialNumber;
+    private String certificateSerialNumber;
 
-    private LocalDate revocationTime;
+    private Date revocationTime;
 
-    //todo add reason of revocation
+    @Enumerated(EnumType.STRING)
+    private CertificateRevocationReason certificateRevocationReason;
 }
