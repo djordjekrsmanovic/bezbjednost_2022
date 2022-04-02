@@ -1,169 +1,35 @@
 <div *ngIf="!toggleDetailWin">
-<div style="margin-bottom: 40px; margin-top: 30px; margin-left: 40px; justify-content: space-between;">
-<ul class="nav">
-    <li class="nav-item" style="margin-right: 30px;">
-        <button type="button" (click)="selectRootCertTab()" class="btn btn-primary" aria-pressed="false" autocomplete="off">
-            Root Certificate
-          </button>
-    </li>
-    <li class="nav-item" style="margin-right: 30px;">
-        <button type="button" (click)="selectOtherCertTab()" class="btn btn-primary" aria-pressed="false" autocomplete="off">
-            Other Certificates
-          </button>
-    </li>
-    <li class="nav-item" style="margin-right: 30px;">
-        <button type="button" (click)="selectAllCertsTab()" class="btn btn-primary" aria-pressed="false" autocomplete="off">
-            All Certificates
-          </button>
-    </li>
-  </ul>
-</div>
-<hr>
+  <div style="margin-bottom: 40px; margin-top: 30px; margin-left: 40px; justify-content: space-between;">
+    <ul class="nav">
+      <li class="nav-item" style="margin-right: 30px;">
+        <button type="button" (click)="selectRootCertTab()" class="btn btn-primary" aria-pressed="false"
+          autocomplete="off">
+          Root Certificate
+        </button>
+      </li>
+      <li class="nav-item" style="margin-right: 30px;">
+        <button type="button" (click)="selectOtherCertTab()" class="btn btn-primary" aria-pressed="false"
+          autocomplete="off">
+          Other Certificates
+        </button>
+      </li>
+      <li class="nav-item" style="margin-right: 30px;">
+        <button type="button" (click)="selectAllCertsTab()" class="btn btn-primary" aria-pressed="false"
+          autocomplete="off">
+          All Certificates
+        </button>
+      </li>
+    </ul>
+  </div>
+  <hr>
+  <app-add-root-certificate *ngIf="rootCertTab"></app-add-root-certificate>
 
-<!-- Dodavanje root sertifikata-->
-<div class="container" *ngIf="rootCertTab">
-  <div style="margin: 2%; padding: 30px;">
-    <label for="" style="margin-bottom: 30px;">Pick start date: <input type="date" [(ngModel)]="rootCertDTO.startDate"></label> <hr>
-    <label for="">Pick expiration date: <input type="date" [(ngModel)]="rootCertDTO.endDate"></label>
-  </div>
-  <div style="display:flex;">
-  <div *ngIf="!keyUsagebool || !extKeyUsagebool"  style="margin-right: 25%;">
-    <div>
-    <button type="button" (click)="keyUsageCBoxes()" style="margin: 40px;" class="btn btn-primary" aria-pressed="false" autocomplete="off">
-      Key usage extensions
-    </button>
-    <button type="button" (click)="keyUsageExtCBoxes()" class="btn btn-primary" aria-pressed="false" autocomplete="off">
-      Extended key usage extensions
-    </button>
-  </div>
 
-  <div *ngIf="keyUsagebool">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExt('DIGITAL_SIGNATURE')" value="DIGITAL_SIGNATURE" id="flexCheckDefault">
-      <label class="form-check-label" for="flexCheckDefault">
-        Digital Signature
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExt('NON_REPUDATION')"  value="NON_REPUDATION" id="flexCheckChecked">
-      <label class="form-check-label" for="flexCheckChecked">
-        Non Repudiation
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExt('KEY_ENCIPHERMENT')" value="KEY_ENCIPHERMENT" id="flexCheckDefault">
-      <label class="form-check-label" for="flexCheckDefault">
-        Key Encipherment
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExt('DATA_ENCIPHERMENT')" value="DATA_ENCIPHERMENT" id="flexCheckChecked">
-      <label class="form-check-label" for="flexCheckChecked">
-        Data encipherment
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExt('KEY_AGREEMENT')" value="KEY_AGREEMENT" id="flexCheckDefault">
-      <label class="form-check-label" for="flexCheckDefault">
-        Key Agreement
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExt('KEY_CERT_SIGN')" value="KEY_CERT_SIGN" id="flexCheckChecked">
-      <label class="form-check-label" for="flexCheckChecked">
-        Key Cert Sign
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExt('CRL_SIGN')" value="CRL_SIGN" id="flexCheckDefault">
-      <label class="form-check-label" for="flexCheckDefault">
-        CRL Sign
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExt('ENCIPHER_ONLY')" value="ENCIPHER_ONLY" id="flexCheckChecked">
-      <label class="form-check-label" for="flexCheckChecked">
-        Encipher only
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExt('DECIPHER_ONLY')" value="DECIPHER_ONLY" id="flexCheckChecked">
-      <label class="form-check-label" for="flexCheckChecked">
-        Decipher only
-      </label>
-    </div>
-    <button type="button" (click)="keyUsagebool=false" style="margin-top: 20px;"  class="btn btn-primary" aria-pressed="false" autocomplete="off">
-      Close
-    </button>
-  </div>
-
-  <div *ngIf="extKeyUsagebool">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('TSL_WEB_SERVER_AUTHENTICATION')" value="TSL_WEB_SERVER_AUTHENTICATION" id="Check1">
-      <label class="form-check-label" for="flexCheckDefault">
-        TSL web server authentication
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('TLS_WEB_CLIENT_AUTHENTICATION')" value="TLS_WEB_CLIENT_AUTHENTICATION" id="Check">
-      <label class="form-check-label" for="flexCheckChecked">
-        TLS web client authentication
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('SIGN_EXECUTABLE_CODE')" value="SIGN_EXECUTABLE_CODE" id="flexCheckDefault">
-      <label class="form-check-label" for="flexCheckDefault">
-        Sign executable code
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('EMAIL_PROTECTION')" value="EMAIL_PROTECTION" id="flexCheckChecked">
-      <label class="form-check-label" for="flexCheckChecked">
-        Email protection 
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('IPSEC_END_SYSTEM')" value="IPSEC_END_SYSTEM" id="flexCheckDefault">
-      <label class="form-check-label" for="flexCheckDefault">
-        IPSEC end system
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('IPSEC_TUNNEL')" value="IPSEC_TUNNEL" id="flexCheckChecked">
-      <label class="form-check-label" for="flexCheckChecked">
-        IPSEC tunnel
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('IPSEC_USER')" value="IPSEC_USER" id="flexCheckDefault">
-      <label class="form-check-label" for="flexCheckDefault">
-        IPSEC user
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('TIMESTAMPING')" value="TIMESTAMPING" id="flexCheckChecked">
-      <label class="form-check-label" for="flexCheckChecked">
-        Timestamping
-      </label>
-    </div> 
-    <button type="button" (click)="extKeyUsagebool=false" style="margin-top: 20px;" class="btn btn-primary" aria-pressed="false" autocomplete="off">
-      Close
-    </button>   
-  </div>
-</div>
-  <div>
-    <button type="button" (click)="makeRootCertificate()" style="margin-top: 20px;" class="btn btn-primary" aria-pressed="false" autocomplete="off">
-      Make Certificate
-    </button>  
-  </div>
-</div>
-</div>
-
-<!-- Dodavanje intermediary i end-entity sertifikata -->
-<div class="container" *ngIf="otherCertTab">
-  <div *ngIf="phase==1">
-    <p style="margin-bottom: 30px;">Select user from a list to assign certificate:</p>
-    <table class="table" style="max-height: 400px;">
+  <!-- Dodavanje intermediary i end-entity sertifikata -->
+  <div class="container" *ngIf="otherCertTab">
+    <div *ngIf="phase==1">
+      <p style="margin-bottom: 30px;">Select user from a list to assign certificate:</p>
+      <table class="table" style="max-height: 400px;">
         <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>
@@ -186,8 +52,8 @@
             <td>@fat</td>
           </tr>
         </tbody>
-      </table>       
-    </div> 
+      </table>
+    </div>
     <div *ngIf="phase==2">
       Druga faza
     </div>
@@ -196,35 +62,41 @@
     </div>
 
 
-    <button type="button" *ngIf="phase>1" (click)="returnToPreviousPhase()" class="btn btn-primary" style="margin-right: 40px;" aria-pressed="false" autocomplete="off">
+    <button type="button" *ngIf="phase>1" (click)="returnToPreviousPhase()" class="btn btn-primary"
+      style="margin-right: 40px;" aria-pressed="false" autocomplete="off">
       Back
-    </button>    
+    </button>
 
     <button type="button" (click)="nextPhase()" class="btn btn-primary" aria-pressed="false" autocomplete="off">
       Next
-    </button> 
-</div>
+    </button>
+  </div>
 
-<!-- Pregled svih sertifikata -->
-<div class="container" *ngIf="allCertsTab">
-    <button (click)="toggleFilters()" type="button" class="btn btn-primary" aria-pressed="false" autocomplete="off">Filters</button>
+  <!-- Pregled svih sertifikata -->
+  <div class="container" *ngIf="allCertsTab">
+    <button (click)="toggleFilters()" type="button" class="btn btn-primary" aria-pressed="false"
+      autocomplete="off">Filters</button>
     <div *ngIf="filtersCard">
-    <div class="input-group" style="margin-left:28%;">
+      <div class="input-group" style="margin-left:28%;">
         <div style="display: flex; flex-flow: column wrap;">
-        <label for=""><input type="radio" name="rbtn" id="cb1" (click)="filter('root')"> Only root certificates</label>
-        <label for=""><input type="radio" name="rbtn" id="cb2" (click)="filter('ca')"> Only intermediary certificates</label>
-        <label for=""><input type="radio" name="rbtn" id="cb3" (click)="filter('ee')"> Only end-entity certificates</label> 
+          <label for=""><input type="radio" name="rbtn" id="cb1" (click)="filter('root')"> Only root
+            certificates</label>
+          <label for=""><input type="radio" name="rbtn" id="cb2" (click)="filter('ca')"> Only intermediary
+            certificates</label>
+          <label for=""><input type="radio" name="rbtn" id="cb3" (click)="filter('ee')"> Only end-entity
+            certificates</label>
         </div>
-        <button type="button" class="btn btn-primary" style="margin-top: 20px; margin-left: 5%;" (click)="refreshList()">
+        <button type="button" class="btn btn-primary" style="margin-top: 20px; margin-left: 5%;"
+          (click)="refreshList()">
           Refresh List
-      </button>
+        </button>
+      </div>
+      <hr>
     </div>
-    <hr>
-    </div>
-   
+
 
     <div>
-    <table class="table">
+      <table class="table">
         <thead class="thead-dark">
           <tr>
             <th scope="col">Serial number</th>
@@ -242,26 +114,26 @@
             <td>{{cert.subjectData.email}}</td>
             <td>{{cert.issuerData.email}}</td>
             <td>
-                <button type="button" class="btn btn-primary">
-                    Revoke
-                </button>
+              <button type="button" class="btn btn-primary">
+                Revoke
+              </button>
             </td>
             <td>
-                <button type="button" class="btn btn-primary" (click)="openModal(cert)">
-                    Details
-                </button>
+              <button type="button" class="btn btn-primary" (click)="openModal(cert)">
+                Details
+              </button>
             </td>
-          </tr>         
+          </tr>
         </tbody>
       </table>
-    </div>     
-</div>
+    </div>
+  </div>
 </div>
 
-<div *ngIf="toggleDetailWin"> 
+<div *ngIf="toggleDetailWin">
   <app-certificate [certificate]="returnCertificateForView()"></app-certificate>
   <hr>
   <button type="button" class="btn btn-primary" style="margin-left: 5%;" (click)="closeModal()">
     Close
-</button>
+  </button>
 </div>

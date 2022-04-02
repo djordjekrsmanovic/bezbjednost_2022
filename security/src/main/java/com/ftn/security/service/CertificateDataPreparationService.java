@@ -28,6 +28,8 @@ import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Random;
 
+import static java.lang.Math.abs;
+
 @Service
 public class CertificateDataPreparationService {
 
@@ -149,7 +151,7 @@ public class CertificateDataPreparationService {
     private String generateCertificateSerialNumber(){
         try {
             Random random = SecureRandom.getInstance("SHA1PRNG", "SUN");
-            Long number=random.nextLong();
+            Integer number=abs(random.nextInt());
             return number.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
