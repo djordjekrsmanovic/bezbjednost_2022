@@ -1,6 +1,6 @@
 package com.ftn.security.converter;
 
-import com.ftn.security.model.ExtendedKeyUsage;
+import com.ftn.security.model.enumeration.ExtendedKeyUsage;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.springframework.stereotype.Component;
 

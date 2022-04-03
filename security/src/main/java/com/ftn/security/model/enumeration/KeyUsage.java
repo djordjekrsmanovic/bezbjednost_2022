@@ -1,4 +1,4 @@
-package com.ftn.security.model;
+package com.ftn.security.model.enumeration;
 
 public enum KeyUsage {
     DIGITAL_SIGNATURE,

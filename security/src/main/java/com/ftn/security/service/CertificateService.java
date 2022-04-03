@@ -9,6 +9,9 @@ import com.ftn.security.dto.RevokeCertificateDto;
 import com.ftn.security.keystores.KeyStoreReader;
 import com.ftn.security.keystores.KeyStoreWriter;
 import com.ftn.security.model.*;
+import com.ftn.security.model.enumeration.CertificateRevocationReason;
+import com.ftn.security.model.enumeration.CertificateType;
+import com.ftn.security.model.enumeration.ExtendedKeyUsage;
 import lombok.RequiredArgsConstructor;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.springframework.stereotype.Service;
@@ -132,6 +135,7 @@ public class CertificateService {
         }
 
         // mora biti root ili CA
+        //todo METODA NE RADI DOBRO POSAO
         if(issuerX509Certificate.getBasicConstraints() == -1){
             System.out.println("Error: issuerCrtificate is not CA");
             return false;
@@ -227,19 +231,19 @@ public class CertificateService {
         KeyStore rootKeyStore=getKeyStoreByCertificateType(CertificateType.ROOT_CERTIFICATE);
         KeyStore caKeyStore=getKeyStoreByCertificateType(CertificateType.CA_CERTIFICATE);
         KeyStore endEntityKeyStore=getKeyStoreByCertificateType(CertificateType.END_ENTITY_CERTIFICATE);
-        if(dto.getCertificateType()==CertificateType.ROOT_CERTIFICATE){ //if certificate type is root certificate we must check every key store and revoke certificates in chain
+        if(dto.getCertificateType()==CertificateType.ROOT_CERTIFICATE){ //if certificate type is root certificate, we must check every key store and revoke certificates in chain
             revokeByCertificateStore(rootKeyStore,dto.getCertificateSerialNumber(),dto.getReason());
             revokeByCertificateStore(caKeyStore,dto.getCertificateSerialNumber(),dto.getReason());
             revokeByCertificateStore(endEntityKeyStore,dto.getCertificateSerialNumber(),dto.getReason());
-        }else if(dto.getCertificateType()==CertificateType.CA_CERTIFICATE){ //if certificate type is ca we must only check ca key store and end entity key store
+        }else if(dto.getCertificateType()==CertificateType.CA_CERTIFICATE){ //if certificate type is ca certificate ,we must only check ca key store and end entity key store
             revokeByCertificateStore(caKeyStore,dto.getCertificateSerialNumber(),dto.getReason());
             revokeByCertificateStore(endEntityKeyStore,dto.getCertificateSerialNumber(),dto.getReason());
-        }else if(dto.getCertificateType()==CertificateType.END_ENTITY_CERTIFICATE){ //if certificate type is end-entity we must only check end entity key store
+        }else if(dto.getCertificateType()==CertificateType.END_ENTITY_CERTIFICATE){ //if certificate type is end-entity, we must only check end entity key store
             revokeByCertificateStore(endEntityKeyStore,dto.getCertificateSerialNumber(),dto.getReason());
         }
     }
 
-    public void revokeByCertificateStore(KeyStore keyStore,String serialNumber,CertificateRevocationReason reason){
+    public void revokeByCertificateStore(KeyStore keyStore, String serialNumber, CertificateRevocationReason reason){
         List<String> aliases= null;
         try {
             aliases = Collections.list(keyStore.aliases());

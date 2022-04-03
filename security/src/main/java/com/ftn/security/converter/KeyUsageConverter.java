@@ -1,6 +1,6 @@
 package com.ftn.security.converter;
 
-import com.ftn.security.model.KeyUsage;
+import com.ftn.security.model.enumeration.KeyUsage;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

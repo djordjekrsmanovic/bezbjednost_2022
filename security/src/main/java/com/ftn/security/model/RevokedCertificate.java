@@ -1,10 +1,10 @@
 package com.ftn.security.model;
 
+import com.ftn.security.model.enumeration.CertificateRevocationReason;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.Date;
 
 @Entity

@@ -1,6 +1,6 @@
 package com.ftn.security.authentication;
 
-import com.ftn.security.model.Role;
+import com.ftn.security.model.enumeration.Role;
 import com.ftn.security.model.Client;
 import com.ftn.security.service.ClientService;
 import lombok.RequiredArgsConstructor;

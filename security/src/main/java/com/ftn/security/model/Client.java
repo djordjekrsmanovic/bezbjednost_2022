@@ -1,5 +1,6 @@
 package com.ftn.security.model;
 
+import com.ftn.security.model.enumeration.Role;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,17 +10,6 @@ import javax.persistence.*;
 @Setter
 @Entity
 public class Client {
-
-    /*
-            builder.addRDN(BCStyle.CN, "Goran Sladic");
-		    builder.addRDN(BCStyle.SURNAME, "Sladic");
-		    builder.addRDN(BCStyle.GIVENNAME, "Goran");
-		    builder.addRDN(BCStyle.O, "UNS-FTN");
-		    builder.addRDN(BCStyle.OU, "Katedra za informatiku");
-		    builder.addRDN(BCStyle.C, "RS");
-		    builder.addRDN(BCStyle.E, "sladicg@uns.ac.rs");
-		    //UID (USER ID) je ID korisnika
-		    builder.addRDN(BCStyle.UID, "123456");*/
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

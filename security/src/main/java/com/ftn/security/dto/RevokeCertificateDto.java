@@ -1,7 +1,7 @@
 package com.ftn.security.dto;
 
-import com.ftn.security.model.CertificateRevocationReason;
-import com.ftn.security.model.CertificateType;
+import com.ftn.security.model.enumeration.CertificateRevocationReason;
+import com.ftn.security.model.enumeration.CertificateType;
 import lombok.Getter;
 import lombok.Setter;
 

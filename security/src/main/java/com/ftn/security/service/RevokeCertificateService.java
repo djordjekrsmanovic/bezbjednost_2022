@@ -1,6 +1,6 @@
 package com.ftn.security.service;
 
-import com.ftn.security.model.CertificateRevocationReason;
+import com.ftn.security.model.enumeration.CertificateRevocationReason;
 import com.ftn.security.model.RevokedCertificate;
 import com.ftn.security.repository.RevokeCertificateRepository;
 import lombok.AllArgsConstructor;

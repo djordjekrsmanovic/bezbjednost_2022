@@ -1,10 +1,9 @@
 package com.ftn.security.dto;
 
-import com.ftn.security.converter.KeyUsageConverter;
-import com.ftn.security.model.CertificateType;
-import com.ftn.security.model.ExtendedKeyUsage;
+import com.ftn.security.model.enumeration.CertificateType;
+import com.ftn.security.model.enumeration.ExtendedKeyUsage;
 import com.ftn.security.model.InformationData;
-import com.ftn.security.model.KeyUsage;
+import com.ftn.security.model.enumeration.KeyUsage;
 import lombok.Getter;
 import lombok.Setter;
 
