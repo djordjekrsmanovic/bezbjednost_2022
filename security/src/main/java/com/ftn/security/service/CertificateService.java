@@ -18,12 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.math.BigInteger;
-import java.security.KeyPair;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.PrivateKey;
+import java.security.*;
+import java.security.cert.*;
 import java.security.cert.Certificate;
-import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.*;
 @RequiredArgsConstructor
@@ -71,20 +68,18 @@ public class CertificateService {
     public ArrayList<CertificateDTO> getAllUserCertificatesDTO(String name) {
         KeyStoreReader keyStoreReader = new KeyStoreReader();
         ArrayList<CertificateDTO> allUserCertificatesDTO = new ArrayList<CertificateDTO>();
-        //TODO: dodati poziv metode za proveru da li je sertifikat revoked ili ne za sada su svi false
         for(X509Certificate x509cer : keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.ROOT_STORE_NAME, KeyStoreData.ROOT_STORE_PASS, name)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer, false, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer, revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
         }
         for(X509Certificate x509cer : keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS, name)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer, false, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.CA_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer, revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.CA_CERTIFICATE));
         }
         for(X509Certificate x509cer : keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.END_ENTITY_STORE_NAME, KeyStoreData.END_ENTITY_STORE_PASS, name)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer, false, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.END_ENTITY_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer, revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.END_ENTITY_CERTIFICATE));
         }
         return allUserCertificatesDTO;
     }
 
-    //TODO uraditi provjeru da li issuer moze da izda sertifikat(datum vazenja validan,mozda provjera da li ima odredjene ekstenzije...)
     public void createCertificate(CreateCertificateDto dto){
 
         KeyStoreWriter keyStoreWriter=new KeyStoreWriter();
@@ -104,7 +99,7 @@ public class CertificateService {
         SubjectData subjectData=certificateDataPreparationService.generateSubjectData(subjectKeyPair,subject,dto.getStartDate(),dto.getEndDate(),subjectKeyUsages,subjectExtendedKeyUsages);
         IssuerData issuerData=certificateDataPreparationService.generateIssuerData(issuerPrivateKey,issuer);
 
-        if(!issuerCanCreateCertificate(dto.getIssuerCertificateSerialNumber())){
+        if(!issuerCanCreateCertificate(dto.getIssuerCertificateSerialNumber(),dto.getIssuerMail(),dto.getIssuerCertificateType())){
             System.out.println("Error: createCertificate: issuer can not create certificate");
             return;
         }
@@ -125,45 +120,51 @@ public class CertificateService {
 
     }
 
-    public boolean issuerCanCreateCertificate(String issuerSerialNumber){
-        X509Certificate issuerX509Certificate = getX509CertificateBySerialNumber(issuerSerialNumber);
-
-        // mora da postoji
-        if(issuerX509Certificate == null){
-            System.out.println("Error: issuerCrtificate is not found");
-            return false;
+    public boolean issuerCanCreateCertificate(String issuerSerialNumber,String issuerMail,CertificateType issuerCertificateType){
+        if(issuerCertificateType != CertificateType.END_ENTITY_CERTIFICATE){
+            return certificateIsValidAndChain(issuerSerialNumber, issuerMail, issuerCertificateType);
         }
-
-        // mora biti root ili CA
-        //todo METODA NE RADI DOBRO POSAO
-        if(issuerX509Certificate.getBasicConstraints() == -1){
-            System.out.println("Error: issuerCrtificate is not CA");
-            return false;
-        }
-
-        if(!certificateIsValid(issuerX509Certificate)){
-            return false;
-        }
-
-        // sve provere su ispunjene
         return true;
     }
 
-    public boolean certificateIsValid(X509Certificate x509){
-        // ne sme da istekne period vazenja
-        if(x509.getNotAfter().before(new Date())){
-            System.out.println("Error: issuerCrtificate expired");
-            return false;
-        }
-
-        // ne sme biti revoked
-        if(false){ //TODO: provera da li je sertifikat reovek
-            System.out.println("Error: issuerCrtificate is revoked");
+    public boolean certificateIsValidAndChain(String issuerSerialNumber,String issuerMail,CertificateType issuerCertificateType){
+        try {
+            KeyStore keyStore = getKeyStoreByCertificateType(issuerCertificateType);
+            Certificate[] certificates = keyStore.getCertificateChain(issuerSerialNumber+issuerMail);
+            for(int i=0;i<certificates.length-1;i++){
+                X509Certificate child=(X509Certificate) certificates[i];
+                X509Certificate parent=(X509Certificate) certificates[i+1];
+                if(!certificateIsValid(child, parent.getPublicKey())){
+                    return false;
+                }
+            }
+            X509Certificate root = (X509Certificate) certificates[certificates.length-1];
+            if(!certificateIsValid(root, root.getPublicKey())){
+                return false;
+            }
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
             return false;
         }
 
         return true;
     }
+
+    private boolean certificateIsValid(X509Certificate x509, PublicKey issuerPublicKey){
+        try {
+            x509.verify(issuerPublicKey);
+            x509.checkValidity(new Date());
+            if(revokeCertificateService.isRevoked(x509.getSerialNumber().toString())){
+                return false;
+            }
+        } catch (CertificateException | NoSuchAlgorithmException | InvalidKeyException | NoSuchProviderException | SignatureException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
 
     public X509Certificate getX509CertificateBySerialNumber(String serialNumber){
         KeyStoreReader keyStoreReader = new KeyStoreReader();
@@ -272,18 +273,17 @@ public class CertificateService {
 
     }
 
-    //todo pozvati metodu za provjeru da li je sertifikat revoke umjesto ovog false
     public ArrayList<CertificateDTO> getAllCertificates(){
         KeyStoreReader keyStoreReader = new KeyStoreReader();
         ArrayList<CertificateDTO> allUserCertificatesDTO = new ArrayList<CertificateDTO>();
         for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.ROOT_STORE_NAME, KeyStoreData.ROOT_STORE_PASS)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer,false, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
         }
         for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer,false, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.CA_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.CA_CERTIFICATE));
         }
         for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.END_ENTITY_STORE_NAME, KeyStoreData.END_ENTITY_STORE_PASS)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer,false, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.END_ENTITY_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.END_ENTITY_CERTIFICATE));
         }
         return allUserCertificatesDTO;
     }

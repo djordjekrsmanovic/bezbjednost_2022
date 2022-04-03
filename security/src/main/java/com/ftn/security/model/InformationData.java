@@ -8,7 +8,6 @@ import java.security.Principal;
 @Getter
 @Setter
 public class InformationData {
-    //TODO: promeniti ime klase???
 
     private String userID;
     private String email;

@@ -22,6 +22,11 @@ public class RevokeCertificateService {
             revokedCertificate.setCertificateRevocationReason(reason);
             revokeCertificateRepository.save(revokedCertificate);
         }
-
     }
+
+    public boolean isRevoked(String certificateSerialNumber){
+        return revokeCertificateRepository.getCertificateBySerialNumber(certificateSerialNumber) != null;
+    }
+
+
 }
