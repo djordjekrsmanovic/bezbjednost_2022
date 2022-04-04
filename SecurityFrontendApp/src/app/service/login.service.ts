@@ -24,6 +24,7 @@ export class LoginService {
     console.log(this.user);
     localStorage.setItem('currentUser', JSON.stringify(this.user));
     localStorage.setItem('mail', this.user.mail);
+    localStorage.setItem('logedIn', 'true')
     if (this.user.role === 'ADMIN') {
       window.location.href = '/admin';
     } else if (this.user.role === 'USER') {
@@ -36,6 +37,7 @@ export class LoginService {
   logout() {
     this.user = new AuthenticationResponse();
     localStorage.setItem('currentUser', JSON.stringify(this.user));
+    localStorage.setItem('logedIn','false')
     window.location.href = '/';
   }
 

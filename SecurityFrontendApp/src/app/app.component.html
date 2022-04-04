@@ -10,7 +10,10 @@
       />
       <small class="text-white">PKI Security</small>
     </a>
+    <button type="button" *ngIf="logged" class="btn btn-primary" (click)="logOut()">
+      Log out</button>
   </div>
+  
 </nav>
 
 <router-outlet></router-outlet>
