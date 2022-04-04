@@ -11,6 +11,7 @@ import { ClientHomePageComponent } from './pages/client/client-home-page.compone
 import { FormsModule } from '@angular/forms';
 import { CertificateComponent } from './components/certificate/certificate.component';
 import { AddRootCertificateComponent } from './admin-home-page/add-root-certificate/add-root-certificate.component';
+import { AddCertificateComponent } from './admin-home-page/add-certificate/add-certificate.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { AddRootCertificateComponent } from './admin-home-page/add-root-certific
     ClientHomePageComponent,
     CertificateComponent,
     AddRootCertificateComponent,
+    AddCertificateComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,260 @@
+<div>
+
+
+    <div class="window">
+        <div class="inside-div">
+            <h2 style="margin-top: 10px;">Add Certificate</h2><hr>
+            <div class="container">
+                <div class="gap"> 
+                    <div class="row">
+                        <h5>Select User</h5>
+                        <div style="background-color: white;">
+                            <table class="table">
+                                <thead>
+                                  <tr >
+                                    <th scope="col">Mail</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Organization Unit</th>
+                                    <th scope="col">Country</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let user of users"  [attr.id]=user.id (click)="rowUserClicked(user.id,user)">
+                                    <th>{{user.mail}}</th>
+                                    <td>{{user.name}}</td>
+                                    <td>{{user.organizationUnit}}</td>
+                                    <td>{{user.country}}</td>  
+                                  </tr>
+                                </tbody>
+                              </table>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="gap">
+                    <div class="row">
+                        <hr>
+                    
+                        <h5>Select Date</h5>
+        
+                        <div class="col">
+                            <label for="" style="margin-bottom: 30px;">Pick start date: <input type="date"  (ngModelChange)="datePickerChanged()"
+                                    [(ngModel)]="dateFrom"></label>
+        
+                        </div>
+                        <div class="col">
+                            <label for="">Pick expiration date: <input type="date" (ngModelChange)="datePickerChanged()" [(ngModel)]="dateTo"></label>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="gap">
+                    <div class="row">
+                        <div style="background: white;">
+                            <table class="table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th scope="col">Serial number</th>
+                                  <th scope="col">Certificate type</th>
+                                  <th scope="col">Issuer mail</th>
+                                  <th scope="col">Subject mail</th>
+                                  <th scope="col">Details</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let cert of allCertificates" [attr.id]="cert.serialNumber" (click)="rowCertificateClicked(cert.serialNumber,cert)">
+                                  <td >{{cert.serialNumber}}</td>
+                                  <td>{{cert.certificateType}}</td>
+                                  <td>{{cert.subjectData.email}}</td>
+                                  <td>{{cert.issuerData.email}}</td>
+                                  
+                                  <td>
+                                    <button type="button" class="btn btn-primary" (click)="openModal(cert)">
+                                      Details
+                                    </button>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                    </div>
+                </div>
+
+                <div *ngIf="toggleDetailWin">
+                    <div class="gap">
+                        <app-certificate [certificate]="returnCertificateForView()"></app-certificate>
+                    </div>
+                   
+                    <hr>
+                    <div class="add-button">
+                        <button type="button" class="btn btn-primary" (click)="closeModal()">
+                            Close
+                          </button>
+                    </div>
+                    
+                  </div>
+    
+                <div class="gap">
+                    <div class="row">
+                        <div class="col">
+                            <h5>Key Usages</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (click)="addKeyExt('DIGITAL_SIGNATURE')"
+                                    value="DIGITAL_SIGNATURE" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Digital Signature
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (click)="addKeyExt('NON_REPUDATION')"
+                                    value="NON_REPUDATION" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Non Repudiation
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (click)="addKeyExt('KEY_ENCIPHERMENT')"
+                                    value="KEY_ENCIPHERMENT" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Key Encipherment
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (click)="addKeyExt('DATA_ENCIPHERMENT')"
+                                    value="DATA_ENCIPHERMENT" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Data encipherment
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (click)="addKeyExt('KEY_AGREEMENT')"
+                                    value="KEY_AGREEMENT" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Key Agreement
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (click)="addKeyExt('KEY_CERT_SIGN')"
+                                    value="KEY_CERT_SIGN" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Key Cert Sign
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (click)="addKeyExt('CRL_SIGN')" value="CRL_SIGN"
+                                    id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    CRL Sign
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (click)="addKeyExt('ENCIPHER_ONLY')"
+                                    value="ENCIPHER_ONLY" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Encipher only
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (click)="addKeyExt('DECIPHER_ONLY')"
+                                    value="DECIPHER_ONLY" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Decipher only
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h5>Extended Key Usages</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox"
+                                    (click)="addKeyExtExtended('TSL_WEB_SERVER_AUTHENTICATION')"
+                                    value="TSL_WEB_SERVER_AUTHENTICATION" id="Check1">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    TSL web server authentication
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox"
+                                    (click)="addKeyExtExtended('TLS_WEB_CLIENT_AUTHENTICATION')"
+                                    value="TLS_WEB_CLIENT_AUTHENTICATION" id="Check">
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    TLS web client authentication
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox"
+                                    (click)="addKeyExtExtended('SIGN_EXECUTABLE_CODE')" value="SIGN_EXECUTABLE_CODE"
+                                    id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Sign executable code
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('EMAIL_PROTECTION')"
+                                    value="EMAIL_PROTECTION" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Email protection
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('IPSEC_END_SYSTEM')"
+                                    value="IPSEC_END_SYSTEM" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    IPSEC end system
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('IPSEC_TUNNEL')"
+                                    value="IPSEC_TUNNEL" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    IPSEC tunnel
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('IPSEC_USER')"
+                                    value="IPSEC_USER" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    IPSEC user
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('TIMESTAMPING')"
+                                    value="TIMESTAMPING" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Timestamping
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="gap">
+                <hr>
+                <h5>
+                    Select Certificate Type
+                </h5>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="CA_CERTIFICATE" checked>
+                    <label class="form-check-label" for="exampleRadios1">
+                      Intermediate Certificate
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="ROOT_CERTIFICATE" value="option2">
+                    <label class="form-check-label" for="exampleRadios2">
+                      End Entity Certificate
+                    </label>
+                  </div>
+            </div>
+
+            <hr>
+            <div class="add-button">
+                <button type="button"  class="btn btn-primary" aria-pressed="false" autocomplete="off">
+                    Confirm
+                  </button>
+            </div>
+        </div>
+    </div>
+    </div>

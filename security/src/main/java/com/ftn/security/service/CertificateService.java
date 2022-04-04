@@ -21,6 +21,9 @@ import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.*;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
+import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.*;
 @RequiredArgsConstructor
@@ -225,6 +228,23 @@ public class CertificateService {
             keyStore=keyStoreReader.getKeyStore(KeyStoreData.END_ENTITY_STORE_NAME,KeyStoreData.END_ENTITY_STORE_PASS);
         }
         return keyStore;
+    }
+
+    public List<CertificateDTO> getCertificateForSigning(){
+        KeyStoreReader keyStoreReader = new KeyStoreReader();
+        ArrayList<CertificateDTO> allUserCertificatesDTO = new ArrayList<CertificateDTO>();
+        List<X509Certificate> rootCertificate=keyStoreReader.getAllCertificates(KeyStoreData.ROOT_STORE_NAME,KeyStoreData.ROOT_STORE_PASS);
+        for(X509Certificate x509cer:rootCertificate){
+            if (validForSigning(x509cer)){
+                allUserCertificatesDTO.add(new CertificateDTO(x509cer,false, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
+            }
+        }
+
+        return allUserCertificatesDTO;
+    }
+
+    private boolean validForSigning(X509Certificate certificate){
+        return false;
     }
 
     public void revokeCertificate(RevokeCertificateDto dto){

@@ -28,5 +28,4 @@ public class RevokeCertificateService {
         return revokeCertificateRepository.getCertificateBySerialNumber(certificateSerialNumber) != null;
     }
 
-
 }

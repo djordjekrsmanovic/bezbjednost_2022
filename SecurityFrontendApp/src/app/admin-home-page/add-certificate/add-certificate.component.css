@@ -1,0 +1,29 @@
+.window{
+    margin-top: 70px;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 80%;
+    background: rgb(215, 235, 223);
+    border-radius: 10px;
+    margin-bottom: 200px;
+}
+
+.inside-div{
+    margin: 5%;
+
+}
+
+.add-button{
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.rowColor{
+    background-color: rgb(235, 228, 228);
+}
+
+.gap{
+    margin-top: 50px;
+}
