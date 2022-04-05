@@ -1,9 +1,6 @@
 package com.ftn.security.controller;
 
-import com.ftn.security.dto.CertificateDTO;
-import com.ftn.security.dto.CreateCertificateDto;
-import com.ftn.security.dto.CreateRootCertificateDto;
-import com.ftn.security.dto.RevokeCertificateDto;
+import com.ftn.security.dto.*;
 import com.ftn.security.service.CertificateService;
 import lombok.RequiredArgsConstructor;
 
@@ -54,6 +51,15 @@ public class CertificateController {
     @GetMapping("/getAllCertificates")
     public ResponseEntity<ArrayList<CertificateDTO>> gettAllCertificates(){
         return new ResponseEntity<ArrayList<CertificateDTO>>(certificateService.getAllCertificates(),HttpStatus.OK);
+    }
+
+    @PostMapping("/get-certificate-for-signing")
+    public ResponseEntity<?> getCertificatesForSigning(@RequestBody LoadCertificateForSigningDto dto){
+        if (dto.getDateTo()==null || dto.getDateFrom()==null){
+            return new ResponseEntity<>(new ArrayList<CertificateDTO>(), HttpStatus.BAD_REQUEST);
+        }else{
+            return new ResponseEntity<>(certificateService.getCertificateForSigning(dto.getDateFrom(),dto.getDateTo()),HttpStatus.OK);
+        }
     }
 
 }

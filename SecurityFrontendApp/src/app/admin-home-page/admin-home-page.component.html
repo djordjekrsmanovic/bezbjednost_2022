@@ -4,13 +4,13 @@
       <li class="nav-item" style="margin-right: 30px;">
         <button type="button" (click)="selectRootCertTab()" class="btn btn-primary" aria-pressed="false"
           autocomplete="off">
-          Root Certificate
+          Add Root Certificate
         </button>
       </li>
       <li class="nav-item" style="margin-right: 30px;">
         <button type="button" (click)="selectOtherCertTab()" class="btn btn-primary" aria-pressed="false"
           autocomplete="off">
-          Other Certificates
+          Add CA/End Entity Certificates
         </button>
       </li>
       <li class="nav-item" style="margin-right: 30px;">
@@ -24,80 +24,45 @@
   <hr>
   <app-add-root-certificate *ngIf="rootCertTab"></app-add-root-certificate>
 
-
-  <!-- Dodavanje intermediary i end-entity sertifikata -->
-  <div class="container" *ngIf="otherCertTab">
-    <div *ngIf="phase==1">
-      <p style="margin-bottom: 30px;">Select user from a list to assign certificate:</p>
-      <table class="table" style="max-height: 400px;">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Surname</th>
-            <th scope="col">Assign Certificate</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr (click)="selectUser()">
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div *ngIf="phase==2">
-      Druga faza
-    </div>
-    <div *ngIf="phase==3">
-      <label for="" style="margin: 10%;">Pick expiration date: <input type="date"> </label>
-    </div>
+  <app-add-certificate *ngIf="otherCertTab"></app-add-certificate>
 
 
-    <button type="button" *ngIf="phase>1" (click)="returnToPreviousPhase()" class="btn btn-primary"
-      style="margin-right: 40px;" aria-pressed="false" autocomplete="off">
-      Back
+  <div *ngIf='revocationReasonFlag'>
+    <h3 style="margin-left: 70px;">Pick revocation reason:</h3>
+    <div class="input-group" style="margin-left:28%;">
+      <div style="display: flex; flex-flow: column wrap;">
+        <label for=""><input type="radio" name="rrbtn" id="cb1" (click)="addRevocReason('KEY_COMPROMISE')"> Key
+          compromise</label>
+        <label for=""><input type="radio" name="rrbtn" id="cb2" (click)="addRevocReason('CA_COMPROMISE')"> CA
+          compromise</label>
+        <label for=""><input type="radio" name="rrbtn" id="cb3" (click)="addRevocReason('AFFILATION_CHANGED')">
+          Affilation changed</label>
+        <label for=""><input type="radio" name="rrbtn" id="cb1" (click)="addRevocReason('SUPERSEDED')">
+          Superseded</label>
+        <label for=""><input type="radio" name="rrbtn" id="cb2" (click)="addRevocReason('CESSATION_OF_OPERATION')">
+          Cessation of operation</label>
+        <label for=""><input type="radio" name="rrbtn" id="cb3" (click)="addRevocReason('CERTIFICATE_HOLD')">
+          Certificate hold</label>
+        <label for=""><input type="radio" name="rrbtn" id="cb1" (click)="addRevocReason('REMOVE_FROM_CRL')"> Remove from
+          CRL</label>
+        <label for=""><input type="radio" name="rrbtn" id="cb2" (click)="addRevocReason('UNSPECIFIED')">
+          Unspecified</label>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary" style="margin-right: 20px; margin-left: 60%;"
+      (click)="revokeCertificate()">
+      Revoke
     </button>
-
-    <button type="button" (click)="nextPhase()" class="btn btn-primary" aria-pressed="false" autocomplete="off">
-      Next
+    <button type="button" class="btn btn-primary" (click)="revocationReasonFlag=false">
+      Cancel
     </button>
+    <hr>
   </div>
 
-<div *ngIf='revocationReasonFlag'>
-  <h3 style="margin-left: 70px;" >Pick revocation reason:</h3>
-  <div class="input-group" style="margin-left:28%;">
-    <div style="display: flex; flex-flow: column wrap;">
-    <label for=""><input type="radio" name="rrbtn" id="cb1" (click)="addRevocReason('KEY_COMPROMISE')"> Key compromise</label>
-    <label for=""><input type="radio" name="rrbtn" id="cb2" (click)="addRevocReason('CA_COMPROMISE')"> CA compromise</label>
-    <label for=""><input type="radio" name="rrbtn" id="cb3" (click)="addRevocReason('AFFILATION_CHANGED')"> Affilation changed</label> 
-    <label for=""><input type="radio" name="rrbtn" id="cb1" (click)="addRevocReason('SUPERSEDED')"> Superseded</label>
-    <label for=""><input type="radio" name="rrbtn" id="cb2" (click)="addRevocReason('CESSATION_OF_OPERATION')"> Cessation of operation</label>
-    <label for=""><input type="radio" name="rrbtn" id="cb3" (click)="addRevocReason('CERTIFICATE_HOLD')"> Certificate hold</label> 
-    <label for=""><input type="radio" name="rrbtn" id="cb1" (click)="addRevocReason('REMOVE_FROM_CRL')"> Remove from CRL</label>
-    <label for=""><input type="radio" name="rrbtn" id="cb2" (click)="addRevocReason('UNSPECIFIED')"> Unspecified</label>
-    </div>    
-</div>
-<button type="button" class="btn btn-primary" style="margin-right: 20px; margin-left: 60%;" (click)="revokeCertificate()">
-  Revoke
-</button>
-<button type="button" class="btn btn-primary" (click)="revocationReasonFlag=false">
-  Cancel
-</button>
-<hr>
-</div>
-
-<!-- Pregled svih sertifikata -->
-<div class="container" *ngIf="allCertsTab">
-    <button (click)="toggleFilters()" type="button" class="btn btn-primary" aria-pressed="false" autocomplete="off">Filters</button>
+  <!-- Pregled svih sertifikata -->
+  <div class="container" *ngIf="allCertsTab">
+    <button (click)="toggleFilters()" type="button" class="btn btn-primary" aria-pressed="false"
+      autocomplete="off">Filters</button>
     <div *ngIf="filtersCard">
       <div class="input-group" style="margin-left:28%;">
         <div style="display: flex; flex-flow: column wrap;">
@@ -133,12 +98,12 @@
           <tr *ngFor="let cert of allCertificates">
             <th scope="row">{{cert.serialNumber}}</th>
             <td>{{cert.certificateType}}</td>
-            <td>{{cert.subjectData.email}}</td>
             <td>{{cert.issuerData.email}}</td>
+            <td>{{cert.subjectData.email}}</td>
             <td>
-                <button type="button" class="btn btn-primary" (click)="collectRevocationData(cert)">
-                    Revoke
-                </button>
+              <button type="button" class="btn btn-primary" (click)="collectRevocationData(cert)">
+                Revoke
+              </button>
             </td>
             <td>
               <button type="button" class="btn btn-primary" (click)="openModal(cert)">
