@@ -5,20 +5,25 @@ import {Observable} from 'rxjs';
 import { rootCertificateDTO } from '../dto-interfaces/rootCertificateDTO';
 import { CertificateDTO } from '../model/CertificateDTO';
 import { revokeCertificateDTO } from '../dto-interfaces/revokeCertificateDTO';
+import { LoginService } from '../service/login.service';
+import { server } from '../app-global';
+import { LoadCertificatesForSigningDto } from '../model/LoadCertificateForSigningDto';
+import { CreateCertificateDto } from '../model/CreateCertificateDto';
+
 
 @Injectable({
     providedIn: 'root',
   })
 
   export class AdminService {
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient,private loginService:LoginService) {}
 
     makeCertificate(){
       
     }
 
     revokeCertificate(dto:revokeCertificateDTO){
-      const headers={'content-type':'application/json'};  
+      const headers = this.loginService.getHeaders(); 
       const body=JSON.stringify(dto) 
         this.http.post('http://localhost:8080/api/certificates/revoke-certificate',body,{'headers': headers}).subscribe(data=>console.log(data)
         );
@@ -29,14 +34,27 @@ import { revokeCertificateDTO } from '../dto-interfaces/revokeCertificateDTO';
     }
 
     addRootCertificate(dto :rootCertificateDTO){
-      const headers={'content-type':'application/json'};  
+      const headers = this.loginService.getHeaders();  
       const body=JSON.stringify(dto) 
       this.http.post('http://localhost:8080/api/certificates/add-root-certificate',body,{'headers': headers}).subscribe(data=>console.log(data)
       );
     }
 
     getAllCertificates(): Observable<CertificateDTO[]> {
-      return this.http.get<CertificateDTO[]>('http://localhost:8080/api/certificates/getAllCertificates');
+      const headers = this.loginService.getHeaders(); 
+      return this.http.get<CertificateDTO[]>('http://localhost:8080/api/certificates/getAllCertificates',{headers:headers});
+    }
+
+    getCertificateForSigning(dates:LoadCertificatesForSigningDto):Observable<CertificateDTO[]>{
+      const headers = this.loginService.getHeaders(); 
+      const body=JSON.stringify(dates) 
+      return this.http.post<CertificateDTO[]>(server+'api/certificates/get-certificate-for-signing',body,{headers:headers});
+    }
+
+    addCertificate(dto:CreateCertificateDto){
+      const headers = this.loginService.getHeaders(); 
+      const body=JSON.stringify(dto) 
+      return this.http.post<CertificateDTO[]>(server+'api/certificates/add-certificate',body,{headers:headers}).subscribe();
     }
 
   }

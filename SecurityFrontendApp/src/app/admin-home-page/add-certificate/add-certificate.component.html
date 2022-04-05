@@ -38,13 +38,21 @@
                         <h5>Select Date</h5>
         
                         <div class="col">
-                            <label for="" style="margin-bottom: 30px;">Pick start date: <input type="date"  (ngModelChange)="datePickerChanged()"
+                            <label for="" style="margin-bottom: 30px;">Pick start date: <input type="date" min="{{minDate | date:'yyyy-MM-dd'}}" (ngModelChange)="datePickerChanged()"
                                     [(ngModel)]="dateFrom"></label>
         
                         </div>
                         <div class="col">
-                            <label for="">Pick expiration date: <input type="date" (ngModelChange)="datePickerChanged()" [(ngModel)]="dateTo"></label>
+                            <label for="">Pick expiration date: <input type="date" min="{{minDate | date:'yyyy-MM-dd'}}" (ngModelChange)="datePickerChanged()" [(ngModel)]="dateTo"></label>
                         </div>
+                    </div>
+                </div>
+
+                <div class="gap">
+                    <div class="add-button">
+                        <button type="button" class="btn btn-primary" (click)="loadCertificatesForSigning()">
+                            Load Certificates For Signing
+                          </button>
                     </div>
                 </div>
                 
@@ -66,9 +74,8 @@
                                 <tr *ngFor="let cert of allCertificates" [attr.id]="cert.serialNumber" (click)="rowCertificateClicked(cert.serialNumber,cert)">
                                   <td >{{cert.serialNumber}}</td>
                                   <td>{{cert.certificateType}}</td>
-                                  <td>{{cert.subjectData.email}}</td>
                                   <td>{{cert.issuerData.email}}</td>
-                                  
+                                  <td>{{cert.subjectData.email}}</td>
                                   <td>
                                     <button type="button" class="btn btn-primary" (click)="openModal(cert)">
                                       Details
@@ -236,13 +243,13 @@
                     Select Certificate Type
                 </h5>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="CA_CERTIFICATE" checked>
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="CA_CERTIFICATE" checked (change)="onRadioChange('CA_CERTIFICATE')">  
                     <label class="form-check-label" for="exampleRadios1">
                       Intermediate Certificate
                     </label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="ROOT_CERTIFICATE" value="option2">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="END_ENTITY_CERTIFICATE" value="option2" (change)="onRadioChange('END_ENTITY_CERTIFICATE')">
                     <label class="form-check-label" for="exampleRadios2">
                       End Entity Certificate
                     </label>
@@ -251,7 +258,7 @@
 
             <hr>
             <div class="add-button">
-                <button type="button"  class="btn btn-primary" aria-pressed="false" autocomplete="off">
+                <button type="button"  class="btn btn-primary" aria-pressed="false" autocomplete="off" (click)="createCertificate()">
                     Confirm
                   </button>
             </div>

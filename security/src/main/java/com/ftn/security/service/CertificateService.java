@@ -308,4 +308,38 @@ public class CertificateService {
         return allUserCertificatesDTO;
     }
 
+
+    public List<CertificateDTO> getCertificateForSigning(Date dateFrom,Date dateTo){
+        KeyStoreReader keyStoreReader = new KeyStoreReader();
+        ArrayList<CertificateDTO> certificatesForSigning = new ArrayList<CertificateDTO>();
+        for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.ROOT_STORE_NAME, KeyStoreData.ROOT_STORE_PASS)){
+            if(isValid(x509cer,dateFrom,dateTo))
+                certificatesForSigning.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
+        }
+        for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS)){
+            if(isValid(x509cer,dateFrom,dateTo))
+                certificatesForSigning.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.CA_CERTIFICATE));
+        }
+
+        return certificatesForSigning;
+
+    }
+
+    private boolean isValid(X509Certificate x509Certificate,Date dateFrom,Date dateTo){
+        boolean retValue=true;
+        try {
+            x509Certificate.checkValidity();
+            if(x509Certificate.getNotAfter().before(dateTo) || x509Certificate.getNotBefore().after(dateFrom)){
+                retValue=false;
+            }
+            if(revokeCertificateService.isRevoked(x509Certificate.getSerialNumber().toString())){
+                retValue=false;
+            }
+        } catch (CertificateExpiredException | CertificateNotYetValidException e) {
+            retValue=false;
+        }
+        return  retValue;
+
+    }
+
 }

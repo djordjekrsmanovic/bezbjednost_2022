@@ -2,16 +2,16 @@ import { InformationData } from "./InformationData";
 
 export class CertificateDTO {
 
-    subjectData: InformationData;
-    issuerData: InformationData;
-    serialNumber: string;
-    startDate: Date;
-    endDate: Date;
-    keyUsages: string[];
-    extendedKey: string[];
-    extendedKeyUsages: string[];
-    certificateType: string;
-    isRevoked: boolean;
+    public subjectData: InformationData;
+    public issuerData: InformationData;
+    public serialNumber: string;
+    public startDate: Date;
+    public endDate: Date;
+    public keyUsages: string[];
+    public extendedKey: string[];
+    public extendedKeyUsages: string[];
+    public certificateType: string;
+    public isRevoked: boolean;
 
     constructor(subjectData: InformationData,
                 issuerData: InformationData,

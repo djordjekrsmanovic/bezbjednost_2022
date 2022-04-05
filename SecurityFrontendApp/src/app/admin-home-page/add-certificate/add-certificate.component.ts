@@ -4,7 +4,9 @@ import { CertificateDTO } from 'src/app/model/CertificateDTO';
 import { UserDto } from 'src/app/model/UserDto';
 import { ClientService } from 'src/app/service/client.service';
 import { AdminService } from '../admin-service';
-import { DatePipe } from '@angular/common';
+import { LoadCertificatesForSigningDto } from 'src/app/model/LoadCertificateForSigningDto';
+import { CreateCertificateDto } from 'src/app/model/CreateCertificateDto';
+
 
 @Component({
   selector: 'app-add-certificate',
@@ -16,7 +18,15 @@ export class AddCertificateComponent implements OnInit {
 
   constructor(private adminService:AdminService,private clientService:ClientService) { }
 
+  certificateType:string='CA_CERTIFICATE';
+  
   userTableIndex:string='';
+
+  keyUsages:string[]=[];
+
+  extendedKeyUsages:string[]=[];
+
+  minDate:Date=new Date();
 
   dateFrom:Date=new Date();
 
@@ -33,6 +43,8 @@ export class AddCertificateComponent implements OnInit {
   selectedIssuerCertficate:any;
 
   allCertificates: CertificateDTO[]= [];
+
+  dto:any;
 
   users:UserDto[]=[];
 
@@ -59,10 +71,16 @@ export class AddCertificateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadCertificates();
+    //this.loadCertificates();
     this.loadUsers();
   }
 
+  loadCertificatesForSigning(){
+    this.certificateTableIndex='';
+    this.dto=new LoadCertificatesForSigningDto(this.dateFrom,this.dateTo);
+
+    this.adminService.getCertificateForSigning(this.dto).subscribe((data) => {this.allCertificates=data}, (error)=> {console.log(error)});
+  }
   loadUsers(){
     this.clientService.getUsers().subscribe(data => {this.users=data}, error => {console.log(error)});
   }
@@ -74,7 +92,7 @@ export class AddCertificateComponent implements OnInit {
       }})
       return;
     }   
-    this.rootCertDTO.keyUsages.push(extension)
+    this.keyUsages.push(extension)
     
   }
 
@@ -85,7 +103,7 @@ export class AddCertificateComponent implements OnInit {
       }})
       return;
     }  
-    this.rootCertDTO.extendedKeyUsages.push(extension)
+    this.extendedKeyUsages.push(extension)
   }
 
   rowUserClicked(k:string,user:UserDto){
@@ -119,8 +137,29 @@ export class AddCertificateComponent implements OnInit {
     return this.selectedCertificateForDetails;
   }
 
+  onRadioChange(value:any){
+    this.certificateType=value;
+ }
+
   loadCertificates(){
     this.adminService.getAllCertificates().subscribe( (data) =>{this.allCertificates=data}, (error) => {console.log(error);
     })
+  }
+
+  createCertificate(){
+    console.log(this.selectedIssuerCertficate);
+    let createCertificateDto=new CreateCertificateDto(
+      this.selectedIssuerCertficate.issuerData.email,
+      this.selectedIssuerCertficate.serialNumber,
+      this.selectedIssuerCertficate.certificateType,
+      this.selectedUser.mail,
+      this.dateFrom,
+      this.dateTo,
+      this.keyUsages,
+      this.extendedKeyUsages,
+      this.certificateType
+    )
+
+    this.adminService.addCertificate(createCertificateDto);
   }
 }
