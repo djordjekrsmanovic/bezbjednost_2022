@@ -34,5 +34,9 @@ export class ClientHomePageComponent implements OnInit {
     this.selectedCertificateBool = false;
   }
   
-
+  download(): void {
+    this.clientService.downloadCertificate(this.selectedCertificate.serialNumber).subscribe(() =>  {});;
+    
+    this.selectedCertificateBool = false;
+  }
 }

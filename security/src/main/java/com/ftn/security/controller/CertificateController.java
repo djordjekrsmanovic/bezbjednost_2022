@@ -62,4 +62,8 @@ public class CertificateController {
         }
     }
 
+    @GetMapping("/downloadCertificate/{serialNumber}")
+    public void downloadCertificate(@PathVariable String serialNumber){
+        certificateService.downloadCertificate(serialNumber);
+    }
 }
