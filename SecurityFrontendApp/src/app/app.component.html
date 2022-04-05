@@ -1,19 +1,44 @@
 <nav class="navbar navbar-light security-color">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
-      <img
-        src="../assets/security.png"
-        class="me-2 img-nav-security"
-        height="20"
-        alt=""
-        loading="lazy"
-      />
+      <img src="../assets/security.png" class="me-2 img-nav-security" height="20" alt="" loading="lazy" />
       <small class="text-white">PKI Security</small>
     </a>
-    <button type="button" *ngIf="logged" class="btn btn-primary" (click)="logOut()">
-      Log out</button>
+    <div class="container">
+      <a routerLink="/add-root-certificate">
+        <button type="button" style="margin-left: 30px;" *ngIf="isAdmin" class="btn btn-primary">Create Root
+          Certificate</button>
+      </a>
+      <a routerLink="/add-certificate">
+        <button type="button" style="margin-left: 30px;" *ngIf="isAdmin" class="btn btn-primary">Create CA/End Entity
+          Certificate</button>
+      </a>
+      <a routerLink="/all-certificates">
+        <button type="button" style="margin-left: 30px;" *ngIf="isAdmin" class="btn btn-primary">All
+          Certificates</button>
+      </a>
+
+      <a routerLink="/user-add-certificate">
+        <button type="button" style="margin-left: 30px;" *ngIf="isUser" class="btn btn-primary">Create CA/End Entity
+          Certificate</button>
+      </a>
+      <a routerLink="/my-certificates">
+        <button type="button" style="margin-left: 30px;" *ngIf="isUser" class="btn btn-primary">My
+          Certificates</button>
+      </a>
+
+      <a routerLink="/Service/Sign_in">
+        <button type="button" *ngIf="logged" style="margin-left: 30px;" class="btn btn-primary" (click)="logOut()">Log
+          out</button>
+      </a>
+
+      
+
+    </div>
+
+
   </div>
-  
+
 </nav>
 
 <router-outlet></router-outlet>

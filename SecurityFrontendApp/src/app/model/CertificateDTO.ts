@@ -11,7 +11,7 @@ export class CertificateDTO {
     public extendedKey: string[];
     public extendedKeyUsages: string[];
     public certificateType: string;
-    public isRevoked: boolean;
+    public revoked: boolean;
 
     constructor(subjectData: InformationData,
                 issuerData: InformationData,
