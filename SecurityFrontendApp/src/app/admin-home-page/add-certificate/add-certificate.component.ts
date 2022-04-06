@@ -6,7 +6,7 @@ import { ClientService } from 'src/app/service/client.service';
 import { AdminService } from '../admin-service';
 import { LoadCertificatesForSigningDto } from 'src/app/model/LoadCertificateForSigningDto';
 import { CreateCertificateDto } from 'src/app/model/CreateCertificateDto';
-
+import { LoginService } from 'src/app/service/login.service';
 
 @Component({
   selector: 'app-add-certificate',
@@ -16,7 +16,7 @@ import { CreateCertificateDto } from 'src/app/model/CreateCertificateDto';
 export class AddCertificateComponent implements OnInit {
 
 
-  constructor(private adminService:AdminService,private clientService:ClientService) { }
+  constructor(private adminService:AdminService,private clientService:ClientService, private loginService: LoginService) { }
 
   certificateType:string='CA_CERTIFICATE';
   
@@ -78,9 +78,14 @@ export class AddCertificateComponent implements OnInit {
   loadCertificatesForSigning(){
     this.certificateTableIndex='';
     this.dto=new LoadCertificatesForSigningDto(this.dateFrom,this.dateTo);
-
-    this.adminService.getCertificateForSigning(this.dto).subscribe((data) => {this.allCertificates=data}, (error)=> {console.log(error)});
+    if(this.loginService.getCurrentUser().role==='ADMIN'){
+      this.adminService.getCertificateForSigning(this.dto).subscribe((data) => {this.allCertificates=data}, (error)=> {console.log(error)});
+    } else {
+      this.adminService.getUserCertificateForSigning(this.dto).subscribe((data) => {this.allCertificates=data}, (error)=> {console.log(error)});
+    }
+    
   }
+
   loadUsers(){
     this.clientService.getUsers().subscribe(data => {this.users=data}, error => {console.log(error)});
   }

@@ -51,6 +51,12 @@ import { CreateCertificateDto } from '../model/CreateCertificateDto';
       return this.http.post<CertificateDTO[]>(server+'api/certificates/get-certificate-for-signing',body,{headers:headers});
     }
 
+    getUserCertificateForSigning(dates:LoadCertificatesForSigningDto):Observable<CertificateDTO[]>{
+      const headers = this.loginService.getHeaders(); 
+      const body=JSON.stringify(dates) 
+      return this.http.post<CertificateDTO[]>(server+'api/certificates/get-user-certificate-for-signing',body,{headers:headers});
+    }
+
     addCertificate(dto:CreateCertificateDto){
       const headers = this.loginService.getHeaders(); 
       const body=JSON.stringify(dto) 
