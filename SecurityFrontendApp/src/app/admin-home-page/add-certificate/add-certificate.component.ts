@@ -149,7 +149,7 @@ export class AddCertificateComponent implements OnInit {
   createCertificate(){
     console.log(this.selectedIssuerCertficate);
     let createCertificateDto=new CreateCertificateDto(
-      this.selectedIssuerCertficate.issuerData.email,
+      this.selectedIssuerCertficate.subjectData.email,
       this.selectedIssuerCertficate.serialNumber,
       this.selectedIssuerCertficate.certificateType,
       this.selectedUser.mail,
