@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { LoginService } from './login.service';
 import { UserDto } from '../model/UserDto';
 import { server } from '../app-global';
+import { Observable } from 'rxjs';
+import { CertificateDTO } from '../model/CertificateDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -25,4 +27,8 @@ export class ClientService {
     return this._http.get<UserDto[]>(server+'api/clients/get-users',{headers: headers});
   }
 
+  downloadCertificate(serialNumber: string) : Observable<CertificateDTO> {
+    const headers = this.loginService.getHeaders();
+    return this._http.get<any>(this.url + "/downloadCertificate/" + serialNumber, { headers: headers });
+  }
 }

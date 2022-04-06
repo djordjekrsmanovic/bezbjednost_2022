@@ -17,6 +17,9 @@ import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.*;
@@ -342,4 +345,21 @@ public class CertificateService {
 
     }
 
+    public void downloadCertificate(String serialNumber) {
+        X509Certificate cert = this.getX509CertificateBySerialNumber(serialNumber);
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream("certificate.cer");
+            fos.write(cert.getEncoded());
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (CertificateEncodingException e) {
+            e.printStackTrace();
+        }
+    }
 }
