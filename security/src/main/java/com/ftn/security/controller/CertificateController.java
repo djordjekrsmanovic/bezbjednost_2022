@@ -66,4 +66,14 @@ public class CertificateController {
     public void downloadCertificate(@PathVariable String serialNumber){
         certificateService.downloadCertificate(serialNumber);
     }
+
+    @PostMapping("/get-user-certificate-for-signing")
+    public ResponseEntity<?> getUserCertificatesForSigning(@RequestBody LoadCertificateForSigningDto dto){
+        if (dto.getDateTo()==null || dto.getDateFrom()==null){
+            return new ResponseEntity<>(new ArrayList<CertificateDTO>(), HttpStatus.BAD_REQUEST);
+        }else{
+            return new ResponseEntity<>(certificateService.getUserCertificateForSigning(dto.getDateFrom(),dto.getDateTo()),HttpStatus.OK);
+        }
+    }
+
 }
