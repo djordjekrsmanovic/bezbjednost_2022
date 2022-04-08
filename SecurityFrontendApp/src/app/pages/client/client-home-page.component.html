@@ -17,8 +17,8 @@
               <tr *ngFor="let cert of certificates">
                 <th scope="row">{{cert.serialNumber}}</th>
                 <td>{{cert.certificateType}}</td>
-                <td>{{cert.subjectData.email}}</td>
                 <td>{{cert.issuerData.email}}</td>
+                <td>{{cert.subjectData.email}}</td>
                 <td>
                     <button type="button" class="btn btn-secondary" (click)="showMoreInfo(cert)">
                         Details
