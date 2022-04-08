@@ -12,7 +12,6 @@ import { FormsModule } from '@angular/forms';
 import { CertificateComponent } from './components/certificate/certificate.component';
 import { AddRootCertificateComponent } from './admin-home-page/add-root-certificate/add-root-certificate.component';
 import { AddCertificateComponent } from './admin-home-page/add-certificate/add-certificate.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -30,7 +29,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
-    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -26,13 +26,6 @@ export class AppComponent {
 
   }
 
-  getUsername(): string{
-    if (this.logged) {
-      return this.loginService.getCurrentUser().mail;  
-    }
-    return "";
-  }
-
   logOut(){
     this.loginService.logout()
   }

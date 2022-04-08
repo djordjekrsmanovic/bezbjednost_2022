@@ -1,7 +1,8 @@
 <div>
+
+
     <div class="window">
         <div class="inside-div">
-            <br>
             <h2 style="margin-top: 10px;">Add Certificate</h2><hr>
             <div class="container">
                 <div class="gap"> 
@@ -37,19 +38,19 @@
                         <h5>Select Date</h5>
         
                         <div class="col">
-                            <label for="" style="margin-bottom: 30px;">Pick start date: <input class="custom-date-style" type="date" min="{{minDate | date:'yyyy-MM-dd'}}" (ngModelChange)="datePickerChanged()"
+                            <label for="" style="margin-bottom: 30px;">Pick start date: <input type="date" min="{{minDate | date:'yyyy-MM-dd'}}" (ngModelChange)="datePickerChanged()"
                                     [(ngModel)]="dateFrom"></label>
         
                         </div>
                         <div class="col">
-                            <label for="">Pick expiration date: <input type="date" class="custom-date-style"  min="{{minDate | date:'yyyy-MM-dd'}}" (ngModelChange)="datePickerChanged()" [(ngModel)]="dateTo"></label>
+                            <label for="">Pick expiration date: <input type="date" min="{{minDate | date:'yyyy-MM-dd'}}" (ngModelChange)="datePickerChanged()" [(ngModel)]="dateTo"></label>
                         </div>
                     </div>
                 </div>
 
                 <div class="gap">
                     <div class="add-button">
-                        <button type="button" class="btn custombutton btn-primary" (click)="loadCertificatesForSigning()">
+                        <button type="button" class="btn btn-primary" (click)="loadCertificatesForSigning()">
                             Load Certificates For Signing
                           </button>
                     </div>
@@ -76,7 +77,7 @@
                                   <td>{{cert.issuerData.email}}</td>
                                   <td>{{cert.subjectData.email}}</td>
                                   <td>
-                                    <button type="button" class="btn btn-link" (click)="openModal(cert)">
+                                    <button type="button" class="btn btn-primary" (click)="openModal(cert)">
                                       Details
                                     </button>
                                   </td>
@@ -92,13 +93,12 @@
                         <app-certificate [certificate]="returnCertificateForView()"></app-certificate>
                     </div>
                    
-                    
+                    <hr>
                     <div class="add-button">
-                        <button type="button" class="btn custombuttonfull btn-primary" (click)="closeModal()">
+                        <button type="button" class="btn btn-primary" (click)="closeModal()">
                             Close
                           </button>
                     </div>
-                    <hr>
                     
                   </div>
     
@@ -108,64 +108,64 @@
                             <h5>Key Usages</h5>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" (click)="addKeyExt('DIGITAL_SIGNATURE')"
-                                    value="DIGITAL_SIGNATURE" id="keyusage1">
-                                <label class="form-check-label" for="keyusage1">
+                                    value="DIGITAL_SIGNATURE" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
                                     Digital Signature
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" (click)="addKeyExt('NON_REPUDATION')"
-                                    value="NON_REPUDATION" id="keyusage2">
-                                <label class="form-check-label" for="keyusage2">
+                                    value="NON_REPUDATION" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
                                     Non Repudiation
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" (click)="addKeyExt('KEY_ENCIPHERMENT')"
-                                    value="KEY_ENCIPHERMENT" id="keyusage3">
-                                <label class="form-check-label" for="keyusage3">
+                                    value="KEY_ENCIPHERMENT" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
                                     Key Encipherment
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" (click)="addKeyExt('DATA_ENCIPHERMENT')"
-                                    value="DATA_ENCIPHERMENT" id="keyusage4">
-                                <label class="form-check-label" for="keyusage4">
+                                    value="DATA_ENCIPHERMENT" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
                                     Data encipherment
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" (click)="addKeyExt('KEY_AGREEMENT')"
-                                    value="KEY_AGREEMENT" id="keyusage5">
-                                <label class="form-check-label" for="keyusage5">
+                                    value="KEY_AGREEMENT" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
                                     Key Agreement
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" (click)="addKeyExt('KEY_CERT_SIGN')"
-                                    value="KEY_CERT_SIGN" id="keyusage6">
-                                <label class="form-check-label" for="keyusage6">
+                                    value="KEY_CERT_SIGN" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
                                     Key Cert Sign
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" (click)="addKeyExt('CRL_SIGN')" value="CRL_SIGN"
-                                    id="keyusage7">
-                                <label class="form-check-label" for="keyusage7">
+                                    id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
                                     CRL Sign
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" (click)="addKeyExt('ENCIPHER_ONLY')"
-                                    value="ENCIPHER_ONLY" id="keyusage8">
-                                <label class="form-check-label" for="keyusage8">
+                                    value="ENCIPHER_ONLY" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
                                     Encipher only
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" (click)="addKeyExt('DECIPHER_ONLY')"
-                                    value="DECIPHER_ONLY" id="keyusage9">
-                                <label class="form-check-label" for="keyusage9">
+                                    value="DECIPHER_ONLY" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
                                     Decipher only
                                 </label>
                             </div>
@@ -175,59 +175,59 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox"
                                     (click)="addKeyExtExtended('TSL_WEB_SERVER_AUTHENTICATION')"
-                                    value="TSL_WEB_SERVER_AUTHENTICATION" id="extendkeyusage1">
-                                <label class="form-check-label" for="extendkeyusage1">
+                                    value="TSL_WEB_SERVER_AUTHENTICATION" id="Check1">
+                                <label class="form-check-label" for="flexCheckDefault">
                                     TSL web server authentication
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox"
                                     (click)="addKeyExtExtended('TLS_WEB_CLIENT_AUTHENTICATION')"
-                                    value="TLS_WEB_CLIENT_AUTHENTICATION" id="extendkeyusage2">
-                                <label class="form-check-label" for="extendkeyusage2">
+                                    value="TLS_WEB_CLIENT_AUTHENTICATION" id="Check">
+                                <label class="form-check-label" for="flexCheckChecked">
                                     TLS web client authentication
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox"
                                     (click)="addKeyExtExtended('SIGN_EXECUTABLE_CODE')" value="SIGN_EXECUTABLE_CODE"
-                                    id="extendkeyusage3">
-                                <label class="form-check-label" for="extendkeyusage3">
+                                    id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
                                     Sign executable code
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('EMAIL_PROTECTION')"
-                                    value="EMAIL_PROTECTION" id="extendkeyusage4">
-                                <label class="form-check-label" for="extendkeyusage4">
+                                    value="EMAIL_PROTECTION" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
                                     Email protection
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('IPSEC_END_SYSTEM')"
-                                    value="IPSEC_END_SYSTEM" id="extendkeyusage5">
-                                <label class="form-check-label" for="extendkeyusage5">
+                                    value="IPSEC_END_SYSTEM" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
                                     IPSEC end system
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('IPSEC_TUNNEL')"
-                                    value="IPSEC_TUNNEL" id="extendkeyusage6">
-                                <label class="form-check-label" for="extendkeyusage6">
+                                    value="IPSEC_TUNNEL" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
                                     IPSEC tunnel
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('IPSEC_USER')"
-                                    value="IPSEC_USER" id="extendkeyusage7">
-                                <label class="form-check-label" for="extendkeyusage7">
+                                    value="IPSEC_USER" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
                                     IPSEC user
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" (click)="addKeyExtExtended('TIMESTAMPING')"
-                                    value="TIMESTAMPING" id="extendkeyusage8">
-                                <label class="form-check-label" for="extendkeyusage8">
+                                    value="TIMESTAMPING" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
                                     Timestamping
                                 </label>
                             </div>
@@ -258,11 +258,12 @@
 
             <hr>
             <div class="add-button">
-                <button type="button"  class="btn custombutton btn-primary" aria-pressed="false" autocomplete="off" (click)="createCertificate()">
+                <button type="button"  class="btn btn-primary" aria-pressed="false" autocomplete="off" (click)="createCertificate()">
                     Confirm
                   </button>
             </div>
-            <div class="gap"><br>
+            <div class="gap">
+
             </div>
         </div>
     </div>
