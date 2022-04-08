@@ -1,3 +1,4 @@
+<!--
 <div class="container" style="margin-top: 120px;">
     <div class="row align-items-center justify-content-between">
       <div class="col-sm-6">
@@ -36,7 +37,323 @@
 
   </div>
 
+-->
+ <!-- Showcase -->
+ <div>
+ <section
+ class="bg-dark text-light p-5 p-lg-0 pt-lg-5 text-center text-sm-start"
+>
+ <div class="container">
+   <div class="d-sm-flex align-items-center justify-content-between">
+     <div>
+       <h1>We are safe <span style="color: #003087; background-color: white;">together</span></h1>
+       <p class="lead my-4">
+         A modern web application designed to manage and distribute public keys
+       </p>
+     </div>
+     
+     <img
+       class="img-fluid w-50 d-none d-sm-block"
+       src="../../../assets/undraw_secure_login_pdn4.svg"
+       alt=""
+       style="margin-bottom: 50px;"
+     />
+   </div>
+ </div>
+</section>
 
+<div class="footersecurity p-5" id="loginidgo">
+ <div class="container">
+   <div class="row align-items-center justify-content-between" *ngIf="!isUserLoggedIn()">
+
+     <div class="col">
+       <img src="../../../assets/wellcome.png" alt="" class="imgwellcome img-fluid">
+     </div>
+  
+     <div class="col">
+      <div class="input-login-style">
+        <label class="form-label">Email</label>
+          <input
+            [(ngModel)]="authenticationRequest.mail"
+            type="text"
+            placeholder=""
+            class="form-control"
+          />
+          <br>
+          <label class="form-label">Password</label>
+          <input
+            [(ngModel)]="authenticationRequest.password"
+            type="password"
+            placeholder=""
+            class="form-control"
+          />
+          <br> <br>
+          <h6 class="text-center" style="color: red;">{{errorMessage}}</h6>
+          <button type="button" style="width: 100%;" class="btn btn-primary" (click)="login()">
+            Log in</button>
+      </div>
+     </div>
+   </div>
+ </div>
+</div>
+
+<!-- CERT -->
+<section class="p-5" style="background-color: white;">
+ <div class="container">
+   <div class="text-center">
+     <h1>You can issue all types of certificates</h1>
+     <br> <br>
+   </div>
+   <div class="row text-center g-4">
+     <div class="col-md">
+       <img src="../../../assets/cert1.png" alt="cert" class="img-fluid imgcertlogo">
+       <h2 class="color1cert">Self Signed Certificate</h2>
+     </div>
+     <div class="col-md">
+       <img src="../../../assets/cert2.png" alt="cert" class="img-fluid imgcertlogo">
+       <h2 class="color2cert">CA Certificate</h2>
+     </div>
+     <div class="col-md">
+       <img src="../../../assets/cert3.png" alt="cert" class="img-fluid imgcertlogo">
+       <h2 class="color3cert">End Entity Certificate</h2>
+     </div>
+   </div>
+ </div>
+</section>
+
+
+
+
+<!-- Question Accordion -->
+<section id="questions" class="p-5" style="background-color: white;">
+ <div class="container">
+   <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+   <div class="accordion accordion-flush" id="questions">
+     <!-- Item 1 -->
+     <div class="accordion-item">
+       <h2 class="accordion-header">
+         <button
+           class="accordion-button collapsed"
+           type="button"
+           data-bs-toggle="collapse"
+           data-bs-target="#question-one"
+         >
+         What is PKI and What is it used for?
+         </button>
+       </h2>
+       <div
+         id="question-one"
+         class="accordion-collapse collapse"
+         data-bs-parent="#questions"
+       >
+         <div class="accordion-body">
+           The Public key infrastructure (PKI) is the set of hardware, software, policies, processes, and procedures required to create, manage, distribute, use, store, and revoke digital certificates and public-keys. PKIs are the foundation that enables the use of technologies, such as digital signatures and encryption, across large user populations. PKIs deliver the elements essential for a secure and trusted business environment for e-commerce and the growing Internet of Things (IoT).
+         </div>
+       </div>
+     </div>
+     <!-- Item 2 -->
+     <div class="accordion-item">
+       <h2 class="accordion-header">
+         <button
+           class="accordion-button collapsed"
+           type="button"
+           data-bs-toggle="collapse"
+           data-bs-target="#question-two"
+         >
+           What is HTTPS?
+         </button>
+       </h2>
+       <div
+         id="question-two"
+         class="accordion-collapse collapse"
+         data-bs-parent="#questions"
+       >
+         <div class="accordion-body">
+           Hypertext Transfer Protocol Secure (HTTPS) is an extension of the Hypertext Transfer Protocol (HTTP). It is used for secure communication over a computer network, and is widely used on the Internet. In HTTPS, the communication protocol is encrypted using Transport Layer Security (TLS) or, formerly, Secure Sockets Layer (SSL). The protocol is therefore also referred to as HTTP over TLS, or HTTP over SSL.
+         </div>
+       </div>
+     </div>
+     <!-- Item 3 -->
+     <div class="accordion-item">
+       <h2 class="accordion-header">
+         <button
+           class="accordion-button collapsed"
+           type="button"
+           data-bs-toggle="collapse"
+           data-bs-target="#question-four"
+         >
+         What Are Website Security Certificates?
+         </button>
+       </h2>
+       <div
+         id="question-four"
+         class="accordion-collapse collapse"
+         data-bs-parent="#questions"
+       >
+         <div class="accordion-body">
+           Essentially, a website security certificate is a digital stamp of approval from an industry-trusted third party known as a certificate authority (CA). More specifically, it’s a digital file containing information that’s issued by a CA that indicates that the website is secured using an encrypted connection.
+
+           A website security certificate is also known as an SSL certificate (or, more accurately, a TLS certificate), an HTTPS certificate, and an SSL server certificate. It’s the thing that allows you to display that nifty padlock in the web address bar. So, regardless of what you prefer to call them, the objective of SSL certs is important — to secure websites, assert identity, and bring happiness and joy to people throughout the world.
+         </div>
+       </div>
+     </div>
+          <!-- Item 4 -->
+          <div class="accordion-item">
+           <h2 class="accordion-header">
+             <button
+               class="accordion-button collapsed"
+               type="button"
+               data-bs-toggle="collapse"
+               data-bs-target="#question-three"
+             >
+             What is “Vulnerability”?  
+             </button>
+           </h2>
+           <div
+             id="question-three"
+             class="accordion-collapse collapse"
+             data-bs-parent="#questions"
+           >
+             <div class="accordion-body">
+               The Vulnerability can be defined as weakness of any system through which intruders or bugs can attack on the system.
+If security testing has not been performed rigorously on the system then chances of vulnerabilities get increase. Time to time patches or fixes requires preventing a system from the vulnerabilities
+             </div>
+           </div>
+         </div>
+     <!-- Item 5 -->
+     <div class="accordion-item">
+       <h2 class="accordion-header">
+         <button
+           class="accordion-button collapsed"
+           type="button"
+           data-bs-toggle="collapse"
+           data-bs-target="#question-five"
+         >
+         what stand for CIA Triad?
+         </button>
+       </h2>
+       <div
+         id="question-five"
+         class="accordion-collapse collapse"
+         data-bs-parent="#questions"
+       >
+         <div class="accordion-body">
+           <ul>
+             <li>
+               <b>Confidentiality</b> 
+               Confidentiality has to do with keeping an organization’s data private. This often means that only authorized users and processes should be able to access or modify data.
+             </li>
+             <li>
+               <b>Integrity</b> 
+               Integrity means that data can be trusted. It should be maintained in a correct state, kept so that it may not be tampered with, and should be correct, authentic, and reliable.
+             </li>
+             <li>
+               <b>Availability</b> 
+               Just as it is important that unauthorized users are kept out of an organization’s data, data should be available to authorized users whenever they require it. This means keeping systems, networks, and devices up and running.
+             </li>
+           </ul>
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
+</section>
+
+<section id="instructors" class="p-5 bg-primary">
+ <div class="container">
+   <h2 class="text-center text-white">Our Team</h2>
+   <p class="lead text-center text-white mb-5">
+     highly specialized in security, working in the industry
+   </p>
+   <div class="row g-4">
+     <div class="col-md-6 col-lg-3">
+       <div class="card bg-light">
+         <div class="card-body text-center">
+           <img
+             src="../../../assets/djordje.jpg"
+             class="rounded-circle mb-3 imgourteam"
+             alt=""
+           />
+           <h3 class="card-title mb-3">Djordje Krsmanovic</h3>
+      
+           <a href="#" class="mx-1">
+            <img src="../../../assets/linkedin.svg" class="img-fluid" alt="">
+          </a>
+          <a href="#" class="mx-1">
+           <img src="../../../assets/github.svg" class="img-fluid" alt="">
+         </a>
+         </div>
+       </div>
+     </div>
+
+     <div class="col-md-6 col-lg-3">
+       <div class="card bg-light">
+         <div class="card-body text-center">
+           <img
+             src="../../../assets/aleksandar.jpg"
+             class="rounded-circle mb-3 imgourteam"
+             alt=""
+           />
+           <h3 class="card-title mb-3">Aleksandar Savic</h3>
+         
+           <a href="#" class="mx-1">
+            <img src="../../../assets/linkedin.svg" class="img-fluid" alt="">
+          </a>
+          <a href="#" class="mx-1">
+           <img src="../../../assets/github.svg" class="img-fluid" alt="">
+         </a>
+         </div>
+       </div>
+     </div>
+
+     <div class="col-md-6 col-lg-3">
+       <div class="card bg-light">
+         <div class="card-body text-center">
+           <img
+             src="../../../assets/bojan.jpg"
+             class="rounded-circle mb-3 imgourteam"
+             alt=""
+           />
+           <h3 class="card-title mb-3">Bojan Prodanovic</h3>
+      
+           <a href="#" class="mx-1">
+            <img src="../../../assets/linkedin.svg" class="img-fluid" alt="">
+          </a>
+          <a href="#" class="mx-1">
+           <img src="../../../assets/github.svg" class="img-fluid" alt="">
+         </a>
+
+         </div>
+       </div>
+     </div>
+
+     <div class="col-md-6 col-lg-3">
+       <div class="card bg-light">
+         <div class="card-body text-center">
+           <img
+             src="../../../assets/rastislav.jpg"
+             class="rounded-circle mb-3 imgourteam"
+             alt=""
+           />
+           <h3 class="card-title mb-3">Rastislav Kukucka</h3>
+           <!--
+           <p class="card-text">
+             Lorem ipsum dolor sit amet consectetur adipisicing elit.
+             Assumenda accusamus nobis sed cupiditate iusto? Quibusdam.
+           </p>-->
+           <a href="#" class="mx-1">
+             <img src="../../../assets/linkedin.svg" class="img-fluid" alt="">
+           </a>
+           <a href="#" class="mx-1">
+            <img src="../../../assets/github.svg" class="img-fluid" alt="">
+          </a>
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
+</section>
+</div>
 
 
 

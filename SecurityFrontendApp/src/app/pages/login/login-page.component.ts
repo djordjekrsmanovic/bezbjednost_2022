@@ -33,6 +33,10 @@ export class LoginPageComponent implements OnInit {
     }
   }
 
+  isUserLoggedIn(): boolean{
+    return this.loginService.isUserLoggedIn();
+  }
+
   successfulLogin(data: AuthenticationResponse) {
     this.errorMessage = '';
     console.log(data);
