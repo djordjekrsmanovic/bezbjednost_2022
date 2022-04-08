@@ -6,6 +6,7 @@ import com.ftn.security.dto.CertificateDTO;
 import com.ftn.security.dto.CreateCertificateDto;
 import com.ftn.security.dto.CreateRootCertificateDto;
 import com.ftn.security.dto.RevokeCertificateDto;
+import com.ftn.security.exceptions.GenericException;
 import com.ftn.security.keystores.KeyStoreReader;
 import com.ftn.security.keystores.KeyStoreWriter;
 import com.ftn.security.model.*;
@@ -16,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -39,10 +39,16 @@ public class CertificateService {
     private final ExtendedKeyUsageConverter extendedKeyUsageConverter;
     private final RevokeCertificateService revokeCertificateService;
 
+    private static final String INVALID_DATE="Date is not valid";
+
+
 
     //todo provjeriti da li je uneseni datum validan
-    public void createRootCertificate(CreateRootCertificateDto dto){
+    public void createRootCertificate(CreateRootCertificateDto dto)  {
         Client admin=clientService.getClientByMail(dto.getAdminMail());
+        if(dto.getStartDate().after(dto.getEndDate())){
+            throw  new GenericException(INVALID_DATE);
+        }
 
         Integer[] keyUsages=keyUsageConverter.convertKeyUsageToInteger(dto.getKeyUsages());
         KeyPurposeId[] extendedKeyUsages=extendedKeyUsageConverter.convertToExtendedKeyUsages(dto.getExtendedKeyUsages());
@@ -89,9 +95,9 @@ public class CertificateService {
     public void createCertificate(CreateCertificateDto dto){
 
         KeyStoreWriter keyStoreWriter=new KeyStoreWriter();
-        File file=new File(KeyStoreData.END_ENTITY_STORE_NAME);
-        keyStoreWriter.loadKeyStore(null,KeyStoreData.END_ENTITY_STORE_PASS.toCharArray());
-        keyStoreWriter.saveKeyStore(KeyStoreData.END_ENTITY_STORE_NAME,KeyStoreData.END_ENTITY_STORE_PASS.toCharArray());
+//        File file=new File(KeyStoreData.END_ENTITY_STORE_NAME);
+//        keyStoreWriter.loadKeyStore(null,KeyStoreData.END_ENTITY_STORE_PASS.toCharArray());
+//        keyStoreWriter.saveKeyStore(KeyStoreData.END_ENTITY_STORE_NAME,KeyStoreData.END_ENTITY_STORE_PASS.toCharArray());
 
         Client issuer=clientService.getClientByMail(dto.getIssuerMail());
         Client subject=clientService.getClientByMail(dto.getSubjectMail());
@@ -105,10 +111,10 @@ public class CertificateService {
         SubjectData subjectData=certificateDataPreparationService.generateSubjectData(subjectKeyPair,subject,dto.getStartDate(),dto.getEndDate(),subjectKeyUsages,subjectExtendedKeyUsages);
         IssuerData issuerData=certificateDataPreparationService.generateIssuerData(issuerPrivateKey,issuer);
 
-        if(!issuerCanCreateCertificate(dto.getIssuerCertificateSerialNumber(),dto.getIssuerMail(),dto.getIssuerCertificateType())){
-            System.out.println("Error: createCertificate: issuer can not create certificate");
-            return;
-        }
+        issuerCanCreateCertificate(dto.getIssuerCertificateType());
+
+        isCertificateChainValid(dto.getIssuerCertificateSerialNumber(),dto.getIssuerMail(),dto.getIssuerCertificateType());
+
 
         X509Certificate certificate= certificateDataPreparationService.generateCertificate(subjectData,issuerData);
 
@@ -126,49 +132,39 @@ public class CertificateService {
 
     }
 
-    public boolean issuerCanCreateCertificate(String issuerSerialNumber,String issuerMail,CertificateType issuerCertificateType){
-        if(issuerCertificateType != CertificateType.END_ENTITY_CERTIFICATE){
-            return certificateIsValidAndChain(issuerSerialNumber, issuerMail, issuerCertificateType);
+    public void issuerCanCreateCertificate(CertificateType issuerCertificateType){
+        if(issuerCertificateType == CertificateType.END_ENTITY_CERTIFICATE) {
+            throw new GenericException("End Entity Certificate can't sign other certificate");
         }
-        return true;
     }
 
-    public boolean certificateIsValidAndChain(String issuerSerialNumber,String issuerMail,CertificateType issuerCertificateType){
+    public void isCertificateChainValid(String issuerSerialNumber, String issuerMail, CertificateType issuerCertificateType){
         try {
             KeyStore keyStore = getKeyStoreByCertificateType(issuerCertificateType);
             Certificate[] certificates = keyStore.getCertificateChain(issuerSerialNumber+issuerMail);
             for(int i=0;i<certificates.length-1;i++){
                 X509Certificate child=(X509Certificate) certificates[i];
                 X509Certificate parent=(X509Certificate) certificates[i+1];
-                if(!certificateIsValid(child, parent.getPublicKey())){
-                    return false;
-                }
+                certificateIsValid(child, parent.getPublicKey());
             }
             X509Certificate root = (X509Certificate) certificates[certificates.length-1];
-            if(!certificateIsValid(root, root.getPublicKey())){
-                return false;
-            }
+            certificateIsValid(root, root.getPublicKey());
         } catch (KeyStoreException e) {
             e.printStackTrace();
-            return false;
-        }
 
-        return true;
+        }
     }
 
-    private boolean certificateIsValid(X509Certificate x509, PublicKey issuerPublicKey){
+    private void certificateIsValid(X509Certificate x509, PublicKey issuerPublicKey){
         try {
             x509.verify(issuerPublicKey);
             x509.checkValidity(new Date());
             if(revokeCertificateService.isRevoked(x509.getSerialNumber().toString())){
-                return false;
+                throw new GenericException("Certificate is revoked");
             }
         } catch (CertificateException | NoSuchAlgorithmException | InvalidKeyException | NoSuchProviderException | SignatureException e) {
-            e.printStackTrace();
-            return false;
+            throw new GenericException("Certificate chain is not valid");
         }
-
-        return true;
     }
 
 
@@ -233,22 +229,6 @@ public class CertificateService {
         return keyStore;
     }
 
-    public List<CertificateDTO> getCertificateForSigning(){
-        KeyStoreReader keyStoreReader = new KeyStoreReader();
-        ArrayList<CertificateDTO> allUserCertificatesDTO = new ArrayList<CertificateDTO>();
-        List<X509Certificate> rootCertificate=keyStoreReader.getAllCertificates(KeyStoreData.ROOT_STORE_NAME,KeyStoreData.ROOT_STORE_PASS);
-        for(X509Certificate x509cer:rootCertificate){
-            if (validForSigning(x509cer)){
-                allUserCertificatesDTO.add(new CertificateDTO(x509cer,false, keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
-            }
-        }
-
-        return allUserCertificatesDTO;
-    }
-
-    private boolean validForSigning(X509Certificate certificate){
-        return false;
-    }
 
     public void revokeCertificate(RevokeCertificateDto dto){
 

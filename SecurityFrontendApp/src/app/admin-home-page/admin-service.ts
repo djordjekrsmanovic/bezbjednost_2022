@@ -36,8 +36,7 @@ import { CreateCertificateDto } from '../model/CreateCertificateDto';
     addRootCertificate(dto :rootCertificateDTO){
       const headers = this.loginService.getHeaders();  
       const body=JSON.stringify(dto) 
-      this.http.post('http://localhost:8080/api/certificates/add-root-certificate',body,{'headers': headers}).subscribe(data=>console.log(data)
-      );
+      this.http.post('http://localhost:8080/api/certificates/add-root-certificate',body,{'headers': headers}).subscribe(data=>console.log(data),error=> alert(error.error));
     }
 
     getAllCertificates(): Observable<CertificateDTO[]> {
@@ -54,7 +53,8 @@ import { CreateCertificateDto } from '../model/CreateCertificateDto';
     addCertificate(dto:CreateCertificateDto){
       const headers = this.loginService.getHeaders(); 
       const body=JSON.stringify(dto) 
-      return this.http.post<CertificateDTO[]>(server+'api/certificates/add-certificate',body,{headers:headers}).subscribe();
+      return this.http.post<CertificateDTO[]>(server+'api/certificates/add-certificate',body,{headers:headers}).subscribe(data => console.log(data),error=> alert(error.error));
+      
     }
 
   }
