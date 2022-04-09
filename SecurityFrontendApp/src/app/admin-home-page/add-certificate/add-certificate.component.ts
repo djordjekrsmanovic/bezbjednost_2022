@@ -153,6 +153,9 @@ export class AddCertificateComponent implements OnInit {
 
   createCertificate(){
     console.log(this.selectedIssuerCertficate);
+    if(this.selectedIssuerCertficate==undefined || this.selectedUser==undefined){
+      alert('Fill all data');
+    }
     let createCertificateDto=new CreateCertificateDto(
       this.selectedIssuerCertficate.subjectData.email,
       this.selectedIssuerCertficate.serialNumber,
