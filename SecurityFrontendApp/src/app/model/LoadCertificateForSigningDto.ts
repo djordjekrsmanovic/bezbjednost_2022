@@ -1,10 +1,10 @@
 
 
 export class LoadCertificatesForSigningDto{
-    dateFrom:Date;
-    dateTo:Date;
+    dateFrom:string;
+    dateTo:string;
 
-    constructor(dateFrom:Date,dateTo:Date){
+    constructor(dateFrom:string,dateTo:string){
         this.dateFrom=dateFrom;
         this.dateTo=dateTo;
     }

@@ -31,10 +31,7 @@ public class CertificateController {
         certificateService.createCertificate(dto);
     }
 
-    @GetMapping("/get")
-    public int get(){
-        return 100;
-    }
+
 
     //@PreAuthorize("hasRole('USER')")
     @GetMapping("/getAllUserCertificates")
@@ -55,11 +52,9 @@ public class CertificateController {
 
     @PostMapping("/get-certificate-for-signing")
     public ResponseEntity<?> getCertificatesForSigning(@RequestBody LoadCertificateForSigningDto dto){
-        if (dto.getDateTo()==null || dto.getDateFrom()==null){
-            return new ResponseEntity<>(new ArrayList<CertificateDTO>(), HttpStatus.BAD_REQUEST);
-        }else{
-            return new ResponseEntity<>(certificateService.getCertificateForSigning(dto.getDateFrom(),dto.getDateTo()),HttpStatus.OK);
-        }
+
+        return new ResponseEntity<>(certificateService.getCertificateForSigning(dto),HttpStatus.OK);
+
     }
 
     @GetMapping("/downloadCertificate/{serialNumber}")
@@ -69,11 +64,9 @@ public class CertificateController {
 
     @PostMapping("/get-user-certificate-for-signing")
     public ResponseEntity<?> getUserCertificatesForSigning(@RequestBody LoadCertificateForSigningDto dto){
-        if (dto.getDateTo()==null || dto.getDateFrom()==null){
-            return new ResponseEntity<>(new ArrayList<CertificateDTO>(), HttpStatus.BAD_REQUEST);
-        }else{
-            return new ResponseEntity<>(certificateService.getUserCertificateForSigning(dto.getDateFrom(),dto.getDateTo()),HttpStatus.OK);
-        }
+
+        return new ResponseEntity<>(certificateService.getUserCertificateForSigning(dto),HttpStatus.OK);
+
     }
 
 }

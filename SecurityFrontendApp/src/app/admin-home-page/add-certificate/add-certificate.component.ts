@@ -28,9 +28,9 @@ export class AddCertificateComponent implements OnInit {
 
   minDate:Date=new Date();
 
-  dateFrom:Date=new Date();
+  dateFrom:string='';
 
-  dateTo:Date=new Date();
+  dateTo:string='';
 
   todayDate=new Date();
 
@@ -64,8 +64,8 @@ export class AddCertificateComponent implements OnInit {
 
   rootCertDTO:rootCertificateDTO= {
     adminMail:'',
-    startDate:new Date(),
-    endDate:new Date(),
+    startDate:'',
+    endDate:'',
     keyUsages:[],
     extendedKeyUsages:[]
   }
@@ -79,9 +79,9 @@ export class AddCertificateComponent implements OnInit {
     this.certificateTableIndex='';
     this.dto=new LoadCertificatesForSigningDto(this.dateFrom,this.dateTo);
     if(this.loginService.getCurrentUser().role==='ADMIN'){
-      this.adminService.getCertificateForSigning(this.dto).subscribe((data) => {this.allCertificates=data}, (error)=> {console.log(error)});
+      this.adminService.getCertificateForSigning(this.dto).subscribe((data) => {this.allCertificates=data}, (error)=> {alert(error.error)});
     } else {
-      this.adminService.getUserCertificateForSigning(this.dto).subscribe((data) => {this.allCertificates=data}, (error)=> {console.log(error)});
+      this.adminService.getUserCertificateForSigning(this.dto).subscribe((data) => {this.allCertificates=data}, (error)=> {alert(error.error)});
     }
     
   }

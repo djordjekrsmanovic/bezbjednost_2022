@@ -1,8 +1,8 @@
 
 export interface rootCertificateDTO{
     adminMail:string | null;
-    startDate:Date;
-    endDate:Date;
+    startDate:string;
+    endDate:string;
     keyUsages:string[];
     extendedKeyUsages:string[];
 }

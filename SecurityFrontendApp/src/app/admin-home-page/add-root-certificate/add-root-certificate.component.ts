@@ -11,8 +11,8 @@ export class AddRootCertificateComponent implements OnInit {
 
   rootCertDTO:rootCertificateDTO= {
     adminMail:'',
-    startDate:new Date(),
-    endDate:new Date(),
+    startDate:'',
+    endDate:'',
     keyUsages:[],
     extendedKeyUsages:[]
   }

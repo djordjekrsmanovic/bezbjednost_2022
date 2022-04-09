@@ -2,10 +2,7 @@ package com.ftn.security.service;
 
 import com.ftn.security.converter.ExtendedKeyUsageConverter;
 import com.ftn.security.converter.KeyUsageConverter;
-import com.ftn.security.dto.CertificateDTO;
-import com.ftn.security.dto.CreateCertificateDto;
-import com.ftn.security.dto.CreateRootCertificateDto;
-import com.ftn.security.dto.RevokeCertificateDto;
+import com.ftn.security.dto.*;
 import com.ftn.security.exceptions.GenericException;
 import com.ftn.security.keystores.KeyStoreReader;
 import com.ftn.security.keystores.KeyStoreWriter;
@@ -13,10 +10,10 @@ import com.ftn.security.model.*;
 import com.ftn.security.model.enumeration.CertificateRevocationReason;
 import com.ftn.security.model.enumeration.CertificateType;
 import com.ftn.security.model.enumeration.ExtendedKeyUsage;
+import com.ftn.security.service.validation.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +38,9 @@ public class CertificateService {
     private final KeyUsageConverter keyUsageConverter;
     private final ExtendedKeyUsageConverter extendedKeyUsageConverter;
     private final RevokeCertificateService revokeCertificateService;
+    private final ValidationService<CreateCertificateDto> certificateValidator;
+    private final ValidationService<CreateRootCertificateDto> rootCertificateValidator;
+    private final ValidationService<LoadCertificateForSigningDto> loadingCertificateValidator;
 
     private static final String INVALID_DATE="Date is not valid";
 
@@ -48,10 +48,10 @@ public class CertificateService {
 
     //todo provjeriti da li je uneseni datum validan
     public void createRootCertificate(CreateRootCertificateDto dto)  {
+
+        rootCertificateValidator.validate(dto);
         Client admin=clientService.getClientByMail(dto.getAdminMail());
-        if(dto.getStartDate().after(dto.getEndDate())){
-            throw  new GenericException(INVALID_DATE);
-        }
+
 
         Integer[] keyUsages=keyUsageConverter.convertKeyUsageToInteger(dto.getKeyUsages());
         KeyPurposeId[] extendedKeyUsages=extendedKeyUsageConverter.convertToExtendedKeyUsages(dto.getExtendedKeyUsages());
@@ -97,6 +97,7 @@ public class CertificateService {
 
     public void createCertificate(CreateCertificateDto dto){
 
+        certificateValidator.validate(dto);
         KeyStoreWriter keyStoreWriter=new KeyStoreWriter();
 //        File file=new File(KeyStoreData.END_ENTITY_STORE_NAME);
 //        keyStoreWriter.loadKeyStore(null,KeyStoreData.END_ENTITY_STORE_PASS.toCharArray());
@@ -295,15 +296,16 @@ public class CertificateService {
     }
 
 
-    public List<CertificateDTO> getCertificateForSigning(Date dateFrom,Date dateTo){
+    public List<CertificateDTO> getCertificateForSigning(LoadCertificateForSigningDto dto){
+        loadingCertificateValidator.validate(dto);
         KeyStoreReader keyStoreReader = new KeyStoreReader();
         ArrayList<CertificateDTO> certificatesForSigning = new ArrayList<CertificateDTO>();
         for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.ROOT_STORE_NAME, KeyStoreData.ROOT_STORE_PASS)){
-            if(isValid(x509cer,dateFrom,dateTo))
+            if(isValid(x509cer,dto.getDateFrom(),dto.getDateTo()))
                 certificatesForSigning.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
         }
         for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS)){
-            if(isValid(x509cer,dateFrom,dateTo))
+            if(isValid(x509cer,dto.getDateFrom(),dto.getDateTo()))
                 certificatesForSigning.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.CA_CERTIFICATE));
         }
 
@@ -311,17 +313,18 @@ public class CertificateService {
 
     }
 
-    public List<CertificateDTO> getUserCertificateForSigning(Date dateFrom,Date dateTo){
+    public List<CertificateDTO> getUserCertificateForSigning(LoadCertificateForSigningDto dto){
+        loadingCertificateValidator.validate(dto);
         KeyStoreReader keyStoreReader = new KeyStoreReader();
         ArrayList<CertificateDTO> certificatesForSigning = new ArrayList<CertificateDTO>();
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userEmail = userDetails.getUsername();
         for(X509Certificate x509cer : keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.ROOT_STORE_NAME, KeyStoreData.ROOT_STORE_PASS, userEmail)){
-            if(isValid(x509cer,dateFrom,dateTo))
+            if(isValid(x509cer,dto.getDateFrom(),dto.getDateTo()))
                 certificatesForSigning.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
         }
         for(X509Certificate x509cer : keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS,userEmail)){
-            if(isValid(x509cer,dateFrom,dateTo))
+            if(isValid(x509cer,dto.getDateFrom(),dto.getDateTo()))
                 certificatesForSigning.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.CA_CERTIFICATE));
         }
 
