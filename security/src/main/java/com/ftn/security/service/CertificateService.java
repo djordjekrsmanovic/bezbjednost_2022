@@ -99,9 +99,6 @@ public class CertificateService {
 
         certificateValidator.validate(dto);
         KeyStoreWriter keyStoreWriter=new KeyStoreWriter();
-//        File file=new File(KeyStoreData.END_ENTITY_STORE_NAME);
-//        keyStoreWriter.loadKeyStore(null,KeyStoreData.END_ENTITY_STORE_PASS.toCharArray());
-//        keyStoreWriter.saveKeyStore(KeyStoreData.END_ENTITY_STORE_NAME,KeyStoreData.END_ENTITY_STORE_PASS.toCharArray());
 
         Client issuer=clientService.getClientByMail(dto.getIssuerMail());
         Client subject=clientService.getClientByMail(dto.getSubjectMail());
