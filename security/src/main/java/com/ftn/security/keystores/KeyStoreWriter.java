@@ -1,5 +1,7 @@
 package com.ftn.security.keystores;
 
+import org.springframework.stereotype.Component;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -13,6 +15,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
+@Component
 public class KeyStoreWriter {
     //KeyStore je Java klasa za citanje specijalizovanih datoteka koje se koriste za cuvanje kljuceva
     //Tri tipa entiteta koji se obicno nalaze u ovakvim datotekama su:
