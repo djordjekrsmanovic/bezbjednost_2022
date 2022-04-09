@@ -27,6 +27,11 @@ export class ClientService {
     return this._http.get<UserDto[]>(server+'api/clients/get-users',{headers: headers});
   }
 
+  getUsersWithoutPrincipal(){
+    const headers=this.loginService.getHeaders();
+    return this._http.get<UserDto[]>(server+'api/clients/get-users-without-principal',{headers: headers});
+  }
+
   downloadCertificate(serialNumber: string) : Observable<CertificateDTO> {
     const headers = this.loginService.getHeaders();
     return this._http.get<any>(this.url + "/downloadCertificate/" + serialNumber, { headers: headers });

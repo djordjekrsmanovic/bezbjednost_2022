@@ -24,4 +24,10 @@ public class ClientController {
         List<Client> users=clientService.getUsers();
         return modelDtoMapper.modelToDtoList(users);
     }
+
+    @GetMapping("/get-users-without-principal")
+    List<UserDto> getUsersWithoutPrincipal(){
+        List<Client> users=clientService.getUsersWithoutPrincipal();
+        return modelDtoMapper.modelToDtoList(users);
+    }
 }

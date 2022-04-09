@@ -87,7 +87,7 @@ export class AddCertificateComponent implements OnInit {
   }
 
   loadUsers(){
-    this.clientService.getUsers().subscribe(data => {this.users=data}, error => {console.log(error)});
+    this.clientService.getUsersWithoutPrincipal().subscribe(data => {this.users=data}, error => {console.log(error)});
   }
 
   addKeyExt(extension:string){
