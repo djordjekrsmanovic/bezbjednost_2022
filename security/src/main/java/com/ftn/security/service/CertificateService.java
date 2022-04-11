@@ -10,17 +10,22 @@ import com.ftn.security.model.*;
 import com.ftn.security.model.enumeration.CertificateRevocationReason;
 import com.ftn.security.model.enumeration.CertificateType;
 import com.ftn.security.model.enumeration.ExtendedKeyUsage;
+import com.ftn.security.model.enumeration.KeyUsage;
 import com.ftn.security.service.validation.ValidationService;
 import lombok.RequiredArgsConstructor;
+import org.bouncycastle.asn1.x500.RDN;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
+import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.*;
 import java.security.cert.Certificate;
@@ -348,19 +353,83 @@ public class CertificateService {
 
     public void downloadCertificate(String serialNumber) {
         X509Certificate cert = this.getX509CertificateBySerialNumber(serialNumber);
+        List<X509Certificate> certificateChain = new ArrayList<>();
+        certificateChain.add(cert);
+        List<X509Certificate> allCertificates = getAllX509Certificates();
+        boolean rootInChain = false;
+
+        while (!rootInChain) {
+            for (X509Certificate x509cer : allCertificates) {
+                try {
+                    x509cer.verify(x509cer.getPublicKey());
+                    certificateChain.add(x509cer);
+                    rootInChain = true;
+                    break;
+                } catch (CertificateException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (InvalidKeyException e) {
+                    e.printStackTrace();
+                } catch (NoSuchProviderException e) {
+                    e.printStackTrace();
+                } catch (SignatureException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    cert.verify(x509cer.getPublicKey());
+                    certificateChain.add(x509cer);
+                    cert = x509cer;
+                    break;
+                } catch (CertificateException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (InvalidKeyException e) {
+                    e.printStackTrace();
+                } catch (NoSuchProviderException e) {
+                    e.printStackTrace();
+                } catch (SignatureException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        StringWriter stringWriter = new StringWriter();
+        try (JcaPEMWriter pemWriter = new JcaPEMWriter(stringWriter)) {
+            for (X509Certificate x509cer : certificateChain)
+                pemWriter.writeObject(x509cer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String pem = stringWriter.toString();
 
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream("certificate.cer");
-            fos.write(cert.getEncoded());
-            fos.flush();
+            fos = new FileOutputStream("D:\\Documents\\Desktop\\certificate.cer");
+            fos.write(pem.getBytes(StandardCharsets.UTF_8));
             fos.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (CertificateEncodingException e) {
-            e.printStackTrace();
         }
+    }
+
+    private ArrayList<X509Certificate> getAllX509Certificates(){
+        KeyStoreReader keyStoreReader = new KeyStoreReader();
+        ArrayList<X509Certificate> allCertificates = new ArrayList<X509Certificate>();
+        for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.ROOT_STORE_NAME, KeyStoreData.ROOT_STORE_PASS)){
+            allCertificates.add(x509cer);
+        }
+        for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS)){
+            allCertificates.add(x509cer);
+        }
+        for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.END_ENTITY_STORE_NAME, KeyStoreData.END_ENTITY_STORE_PASS)){
+            allCertificates.add(x509cer);
+        }
+        return allCertificates;
     }
 }
