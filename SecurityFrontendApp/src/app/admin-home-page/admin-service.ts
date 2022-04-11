@@ -31,6 +31,13 @@ import { CreateCertificateDto } from '../model/CreateCertificateDto';
 
     downloadCertificate() : Observable<Blob> {
       return this.http.get('http://localhost:8080/downloadCertificate', {responseType: 'blob'});
+  }
+  
+    url = 'http://localhost:8080/' + 'api/certificates';
+    downloadCertificateWeb(serialNumber: string): Observable<Blob> {
+      return this.http.get(this.url + "/downloadCertificate/" + serialNumber, {
+        responseType: 'blob'
+      });
     }
 
     addRootCertificate(dto :rootCertificateDTO){

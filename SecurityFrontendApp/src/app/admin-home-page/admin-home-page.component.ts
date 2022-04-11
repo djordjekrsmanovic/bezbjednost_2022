@@ -34,7 +34,7 @@ export class AdminHomePageComponent implements OnInit {
   keyUsagebool:boolean=false;
   extKeyUsagebool:boolean=false;
   allCertificates: CertificateDTO[]= [];
-  selectedCertificate:any;
+  selectedCertificate!:CertificateDTO;
   filteredCertificates:CertificateDTO[]=[];
   allCertificatesReserve:CertificateDTO[]=[];
   filterCounter=0;
@@ -117,7 +117,8 @@ export class AdminHomePageComponent implements OnInit {
   }
 
   downloadCertificate(){
-    this.adminService.downloadCertificate().subscribe(blob =>saveAs(blob, 'certificate.cer'))
+    this.adminService.downloadCertificateWeb(this.selectedCertificate.serialNumber).
+      subscribe(blob => saveAs(blob, "Certificate_"+this.selectedCertificate.serialNumber+".cer"));
   }
 
   // addKeyExt(extension:string){
