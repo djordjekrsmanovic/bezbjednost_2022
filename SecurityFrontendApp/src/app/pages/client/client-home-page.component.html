@@ -1,32 +1,36 @@
 <div class="container">
-    <div class="row" style="margin-top: 20px;">
-        <h2 class="text-center">All your Certificates</h2>
-    </div>
-    <div class="row">
-        <table class="table">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">Serial number</th>
-                <th scope="col">Certificate type</th>
-                <th scope="col">Issuer mail</th>
-                <th scope="col">Subject mail</th>
-                <th scope="col">Details</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let cert of certificates">
-                <th scope="row">{{cert.serialNumber}}</th>
-                <td>{{cert.certificateType}}</td>
-                <td>{{cert.subjectData.email}}</td>
-                <td>{{cert.issuerData.email}}</td>
-                <td>
-                    <button type="button" class="btn btn-secondary" (click)="showMoreInfo(cert)">
-                        Details
-                    </button>
-                </td>
-              </tr>         
-            </tbody>
-          </table>
+    <div class="card cardstyle" style="margin-top: 40px;">
+        <div class="card-body">
+            <div class="row" style="margin-top: 20px;">
+                <h2 class="text-center">All your Certificates</h2>
+            </div>
+            <div class="row">
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Serial number</th>
+                        <th scope="col">Certificate type</th>
+                        <th scope="col">Issuer mail</th>
+                        <th scope="col">Subject mail</th>
+                        <th scope="col">Details</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let cert of certificates">
+                        <th scope="row">{{cert.serialNumber}}</th>
+                        <td>{{cert.certificateType}}</td>
+                        <td>{{cert.subjectData.email}}</td>
+                        <td>{{cert.issuerData.email}}</td>
+                        <td>
+                            <button type="button" class="btn btn-link" (click)="showMoreInfo(cert)">
+                                Details
+                            </button>
+                        </td>
+                    </tr>         
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <br> <br>
     <div class="row">
