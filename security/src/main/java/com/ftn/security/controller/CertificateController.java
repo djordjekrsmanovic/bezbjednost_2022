@@ -4,11 +4,16 @@ import com.ftn.security.dto.*;
 import com.ftn.security.service.CertificateService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.Principal;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -58,8 +63,21 @@ public class CertificateController {
     }
 
     @GetMapping("/downloadCertificate/{serialNumber}")
-    public void downloadCertificate(@PathVariable String serialNumber){
-        certificateService.downloadCertificate(serialNumber);
+    @ResponseBody
+    public ResponseEntity<Resource> downloadCertificate(@PathVariable String serialNumber){
+        Resource certDownload = certificateService.downloadCertificateWeb(serialNumber);
+        if(certDownload != null){
+            try {
+                Path path = certDownload.getFile().toPath();
+
+                return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(path))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + certDownload.getFilename() + "\"")
+                        .body(certDownload);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return new ResponseEntity<Resource>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/get-user-certificate-for-signing")

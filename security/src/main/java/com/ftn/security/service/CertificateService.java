@@ -13,6 +13,8 @@ import com.ftn.security.model.enumeration.ExtendedKeyUsage;
 import com.ftn.security.service.validation.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.*;
 import java.security.cert.*;
 import java.security.cert.Certificate;
@@ -346,15 +351,16 @@ public class CertificateService {
 
     }
 
-    public void downloadCertificate(String serialNumber) {
+    public boolean downloadCertificateOnBack(String serialNumber) {
         X509Certificate cert = this.getX509CertificateBySerialNumber(serialNumber);
 
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream("certificate.cer");
+            fos = new FileOutputStream("certificate_"+serialNumber+".cer");
             fos.write(cert.getEncoded());
             fos.flush();
             fos.close();
+            return true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -362,5 +368,25 @@ public class CertificateService {
         } catch (CertificateEncodingException e) {
             e.printStackTrace();
         }
+        return false;
+    }
+
+    public Resource downloadCertificateWeb(String serialNumber) {
+        if(downloadCertificateOnBack(serialNumber)){
+            try {
+                Path file = Paths.get("")
+                        .resolve("certificate_"+serialNumber+".cer");
+                Resource resource = new UrlResource(file.toUri());
+
+                if (resource.exists() || resource.isReadable()) {
+                    return resource;
+                } else {
+                    throw new RuntimeException("Could not read the file!");
+                }
+            } catch (MalformedURLException e) {
+                throw new RuntimeException("Error: " + e.getMessage());
+            }
+        }
+        return null;
     }
 }
