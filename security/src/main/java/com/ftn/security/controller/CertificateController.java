@@ -67,15 +67,9 @@ public class CertificateController {
     public ResponseEntity<Resource> downloadCertificate(@PathVariable String serialNumber){
         Resource certDownload = certificateService.downloadCertificateWeb(serialNumber);
         if(certDownload != null){
-            try {
-                Path path = certDownload.getFile().toPath();
-
-                return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(path))
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + certDownload.getFilename() + "\"")
-                        .body(certDownload);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + certDownload.getFilename() + "\"")
+                    .body(certDownload);
         }
         return new ResponseEntity<Resource>(HttpStatus.BAD_REQUEST);
     }

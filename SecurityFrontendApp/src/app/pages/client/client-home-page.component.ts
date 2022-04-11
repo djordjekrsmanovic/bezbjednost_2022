@@ -34,18 +34,11 @@ export class ClientHomePageComponent implements OnInit {
   closeShowMoreInfo(): void {
     this.selectedCertificateBool = false;
   }
-  
-  /*
-  download(): void {
-    this.clientService.downloadCertificate(this.selectedCertificate.serialNumber).subscribe(() =>  {});;
-    
-    this.selectedCertificateBool = false;
-  }
-  */
+
 
   download(): void {
     this.clientService
       .downloadCertificateWeb(this.selectedCertificate.serialNumber)
-      .subscribe(blob => saveAs(blob, "Certificate"+this.selectedCertificate.serialNumber+".cer"));
+      .subscribe(blob => saveAs(blob, "Certificate_"+this.selectedCertificate.serialNumber+".cer"));
   }
 }

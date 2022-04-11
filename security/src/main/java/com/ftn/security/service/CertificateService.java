@@ -13,6 +13,7 @@ import com.ftn.security.model.enumeration.ExtendedKeyUsage;
 import com.ftn.security.service.validation.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -372,23 +373,23 @@ public class CertificateService {
     }
 
     public Resource downloadCertificateWeb(String serialNumber) {
-        X509Certificate certificate = this.getX509CertificateBySerialNumber(serialNumber);
-        if(downloadCertificateOnBack(serialNumber)){
-            try {
-                Path file = Paths.get("")
-                        .resolve("certificate_"+serialNumber+".cer");
-                Resource resource = new UrlResource(file.toUri());
+        X509Certificate certificate = getX509CertificateBySerialNumber(serialNumber);
+        if(certificate == null) return null;
 
-
-                if (resource.exists() || resource.isReadable()) {
-                    return resource;
-                } else {
-                    throw new RuntimeException("Could not read the file!");
-                }
-            } catch (MalformedURLException e) {
-                throw new RuntimeException("Error: " + e.getMessage());
-            }
+        Resource resource = null;
+        try {
+            resource = new ByteArrayResource(certificate.getEncoded());
+        } catch (CertificateEncodingException e) {
+            e.printStackTrace();
         }
-        return null;
+
+        if(resource == null) return null;
+
+        if (resource.exists() || resource.isReadable()) {
+            return resource;
+        } else {
+            throw new RuntimeException("Could not read the file!");
+        }
+
     }
 }
