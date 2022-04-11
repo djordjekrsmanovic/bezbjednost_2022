@@ -36,4 +36,10 @@ export class ClientService {
     const headers = this.loginService.getHeaders();
     return this._http.get<any>(this.url + "/downloadCertificate/" + serialNumber, { headers: headers });
   }
+
+  downloadCertificateWeb(serialNumber: string): Observable<Blob> {
+    return this._http.get(this.url + "/downloadCertificate/" + serialNumber, {
+      responseType: 'blob'
+    });
+  }
 }

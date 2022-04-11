@@ -372,11 +372,13 @@ public class CertificateService {
     }
 
     public Resource downloadCertificateWeb(String serialNumber) {
+        X509Certificate certificate = this.getX509CertificateBySerialNumber(serialNumber);
         if(downloadCertificateOnBack(serialNumber)){
             try {
                 Path file = Paths.get("")
                         .resolve("certificate_"+serialNumber+".cer");
                 Resource resource = new UrlResource(file.toUri());
+
 
                 if (resource.exists() || resource.isReadable()) {
                     return resource;

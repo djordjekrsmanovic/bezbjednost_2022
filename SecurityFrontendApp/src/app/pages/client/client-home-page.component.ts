@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CertificateDTO } from 'src/app/model/CertificateDTO';
 import { ClientService } from 'src/app/service/client.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-client-home-page',
@@ -34,9 +35,17 @@ export class ClientHomePageComponent implements OnInit {
     this.selectedCertificateBool = false;
   }
   
+  /*
   download(): void {
     this.clientService.downloadCertificate(this.selectedCertificate.serialNumber).subscribe(() =>  {});;
     
     this.selectedCertificateBool = false;
+  }
+  */
+
+  download(): void {
+    this.clientService
+      .downloadCertificateWeb(this.selectedCertificate.serialNumber)
+      .subscribe(blob => saveAs(blob, "Certificate"+this.selectedCertificate.serialNumber+".cer"));
   }
 }
