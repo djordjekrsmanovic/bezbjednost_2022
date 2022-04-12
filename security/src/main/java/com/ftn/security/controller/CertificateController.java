@@ -66,7 +66,6 @@ public class CertificateController {
 
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/downloadCertificate/{serialNumber}")
     @ResponseBody
     public ResponseEntity<Resource> downloadCertificate(@PathVariable String serialNumber){

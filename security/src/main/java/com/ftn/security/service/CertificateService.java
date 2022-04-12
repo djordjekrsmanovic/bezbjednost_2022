@@ -91,17 +91,28 @@ public class CertificateService {
         return certificates;
     }
 
+    private ArrayList<ExtendedKeyUsage> getExtendedKeyUsage(X509Certificate x509){
+        ArrayList<ExtendedKeyUsage> extendedKeyUsages = null;
+        try {
+            extendedKeyUsages = extendedKeyUsageConverter.getExtendedKeyUsage(x509.getExtendedKeyUsage());
+        } catch (CertificateParsingException e) {
+            e.printStackTrace();
+            extendedKeyUsages = new ArrayList<ExtendedKeyUsage>();
+        }
+        return extendedKeyUsages;
+    }
+
     public ArrayList<CertificateDTO> getAllUserCertificatesDTO(String name) {
         KeyStoreReader keyStoreReader = new KeyStoreReader();
         ArrayList<CertificateDTO> allUserCertificatesDTO = new ArrayList<CertificateDTO>();
         for(X509Certificate x509cer : keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.ROOT_STORE_NAME, KeyStoreData.ROOT_STORE_PASS, name)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer, revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer, revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), getExtendedKeyUsage(x509cer), CertificateType.ROOT_CERTIFICATE));
         }
         for(X509Certificate x509cer : keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS, name)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer, revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.CA_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer, revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), getExtendedKeyUsage(x509cer), CertificateType.CA_CERTIFICATE));
         }
         for(X509Certificate x509cer : keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.END_ENTITY_STORE_NAME, KeyStoreData.END_ENTITY_STORE_PASS, name)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer, revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.END_ENTITY_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer, revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), getExtendedKeyUsage(x509cer), CertificateType.END_ENTITY_CERTIFICATE));
         }
         return allUserCertificatesDTO;
     }
@@ -292,13 +303,13 @@ public class CertificateService {
         KeyStoreReader keyStoreReader = new KeyStoreReader();
         ArrayList<CertificateDTO> allUserCertificatesDTO = new ArrayList<CertificateDTO>();
         for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.ROOT_STORE_NAME, KeyStoreData.ROOT_STORE_PASS)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), getExtendedKeyUsage(x509cer), CertificateType.ROOT_CERTIFICATE));
         }
         for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.CA_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), getExtendedKeyUsage(x509cer), CertificateType.CA_CERTIFICATE));
         }
         for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.END_ENTITY_STORE_NAME, KeyStoreData.END_ENTITY_STORE_PASS)){
-            allUserCertificatesDTO.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.END_ENTITY_CERTIFICATE));
+            allUserCertificatesDTO.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), getExtendedKeyUsage(x509cer), CertificateType.END_ENTITY_CERTIFICATE));
         }
         return allUserCertificatesDTO;
     }
@@ -310,11 +321,11 @@ public class CertificateService {
         ArrayList<CertificateDTO> certificatesForSigning = new ArrayList<CertificateDTO>();
         for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.ROOT_STORE_NAME, KeyStoreData.ROOT_STORE_PASS)){
             if(isValid(x509cer,dto.getDateFrom(),dto.getDateTo()))
-                certificatesForSigning.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
+                certificatesForSigning.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), getExtendedKeyUsage(x509cer), CertificateType.ROOT_CERTIFICATE));
         }
         for(X509Certificate x509cer : keyStoreReader.getAllCertificates(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS)){
             if(isValid(x509cer,dto.getDateFrom(),dto.getDateTo()))
-                certificatesForSigning.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.CA_CERTIFICATE));
+                certificatesForSigning.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), getExtendedKeyUsage(x509cer), CertificateType.CA_CERTIFICATE));
         }
 
         return certificatesForSigning;
@@ -329,11 +340,11 @@ public class CertificateService {
         String userEmail = userDetails.getUsername();
         for(X509Certificate x509cer : keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.ROOT_STORE_NAME, KeyStoreData.ROOT_STORE_PASS, userEmail)){
             if(isValid(x509cer,dto.getDateFrom(),dto.getDateTo()))
-                certificatesForSigning.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.ROOT_CERTIFICATE));
+                certificatesForSigning.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), getExtendedKeyUsage(x509cer), CertificateType.ROOT_CERTIFICATE));
         }
         for(X509Certificate x509cer : keyStoreReader.getAllCertificatesBySubjectEmail(KeyStoreData.CA_STORE_NAME, KeyStoreData.CA_STORE_PASS,userEmail)){
             if(isValid(x509cer,dto.getDateFrom(),dto.getDateTo()))
-                certificatesForSigning.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), new ArrayList<ExtendedKeyUsage>(), CertificateType.CA_CERTIFICATE));
+                certificatesForSigning.add(new CertificateDTO(x509cer,revokeCertificateService.isRevoked(x509cer.getSerialNumber().toString()), keyUsageConverter.getKeyUsageFromBooleanArr(x509cer.getKeyUsage()), getExtendedKeyUsage(x509cer), CertificateType.CA_CERTIFICATE));
         }
 
         return certificatesForSigning;
