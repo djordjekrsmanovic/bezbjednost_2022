@@ -13,7 +13,7 @@ public class LoadingCertificateValid implements ValidationService<LoadCertificat
         if (object.getDateTo()==null || object.getDateFrom()==null){
             throw new GenericException("Select valid dates for loading certificates");
         }
-        if(object.getDateFrom().after(object.getDateTo()) || object.getDateFrom().before(new Date()) || object.getDateTo().before(new Date())){
+        if(object.getDateFrom().after(object.getDateTo()) || object.getDateTo().before(new Date())){ // object.getDateFrom().before(new Date())
             throw  new GenericException("Select valid dates");
         }
     }

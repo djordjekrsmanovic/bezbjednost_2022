@@ -13,7 +13,7 @@ public class CertificateValid implements ValidationService<CreateCertificateDto>
         if(object.getEndDate()==null || object.getStartDate()==null || object.getSubjectCertificateType()==null || object.getIssuerMail()==null || object.getIssuerCertificateSerialNumber()==null){
             throw new GenericException("Fill all data");
         }
-        if(object.getStartDate().after(object.getEndDate()) || object.getStartDate().before(new Date()) || object.getEndDate().before(new Date())){
+        if(object.getStartDate().after(object.getEndDate()) || object.getEndDate().before(new Date())){ // object.getStartDate().before(new Date())
             throw  new GenericException("Select valid dates");
         }
     }

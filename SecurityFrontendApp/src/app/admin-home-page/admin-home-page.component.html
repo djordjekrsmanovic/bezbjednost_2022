@@ -76,7 +76,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let cert of allCertificates">
+            <tr *ngFor="let cert of allCertificates" [ngClass]="{'revokedCertCss': cert.revoked}">
               <th scope="row">{{cert.serialNumber}}</th>
               <td>{{cert.certificateType}}</td>
               <td>{{cert.issuerData.email}}</td>

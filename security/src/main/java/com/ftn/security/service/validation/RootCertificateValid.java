@@ -14,7 +14,7 @@ public class RootCertificateValid implements ValidationService<CreateRootCertifi
         if(object.getStartDate()==null || object.getEndDate()==null || object.getKeyUsages()==null || object.getExtendedKeyUsages()==null){
             throw new GenericException("Fill all data");
         }
-        if(object.getStartDate().after(object.getEndDate()) || object.getStartDate().before(new Date()) || object.getEndDate().before(new Date())){
+        if(object.getStartDate().after(object.getEndDate()) || object.getEndDate().before(new Date())){ // object.getStartDate().before(new Date())
             throw  new GenericException("Select valid dates");
         }
     }

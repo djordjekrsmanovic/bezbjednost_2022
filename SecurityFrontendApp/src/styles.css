@@ -98,3 +98,7 @@ background-color: #f1f2f6;}
   .cardstyle{
     border-radius: 10px;
   }
+
+  .revokedCertCss{
+    color: red;
+  }

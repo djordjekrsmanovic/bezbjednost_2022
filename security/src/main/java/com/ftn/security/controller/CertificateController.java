@@ -58,7 +58,7 @@ public class CertificateController {
         return new ResponseEntity<ArrayList<CertificateDTO>>(certificateService.getAllCertificates(),HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    //@PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/get-certificate-for-signing")
     public ResponseEntity<?> getCertificatesForSigning(@RequestBody LoadCertificateForSigningDto dto){
 
