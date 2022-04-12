@@ -25,12 +25,13 @@ public class CertificateController {
 
     private final CertificateService certificateService;
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add-root-certificate")
     public void addRootCertificate(@RequestBody  CreateRootCertificateDto dto){
         certificateService.createRootCertificate(dto);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/add-certificate")
     public void addCertificate(@RequestBody CreateCertificateDto dto){
         certificateService.createCertificate(dto);
@@ -38,23 +39,26 @@ public class CertificateController {
 
 
 
-    //@PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/getAllUserCertificates")
     public ResponseEntity<ArrayList<CertificateDTO>> getAllUserCertificates(Principal user){
         System.out.println("USER: " + user.getName());
         return new ResponseEntity<ArrayList<CertificateDTO>>(certificateService.getAllUserCertificatesDTO(user.getName()), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/revoke-certificate")
     public void revokeCertificate(@RequestBody RevokeCertificateDto revokeCertificateDto){
         certificateService.revokeCertificate(revokeCertificateDto);
     }
-    
+
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/getAllCertificates")
     public ResponseEntity<ArrayList<CertificateDTO>> gettAllCertificates(){
         return new ResponseEntity<ArrayList<CertificateDTO>>(certificateService.getAllCertificates(),HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/get-certificate-for-signing")
     public ResponseEntity<?> getCertificatesForSigning(@RequestBody LoadCertificateForSigningDto dto){
 
@@ -62,6 +66,7 @@ public class CertificateController {
 
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/downloadCertificate/{serialNumber}")
     @ResponseBody
     public ResponseEntity<Resource> downloadCertificate(@PathVariable String serialNumber){
@@ -74,6 +79,7 @@ public class CertificateController {
         return new ResponseEntity<Resource>(HttpStatus.BAD_REQUEST);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/get-user-certificate-for-signing")
     public ResponseEntity<?> getUserCertificatesForSigning(@RequestBody LoadCertificateForSigningDto dto){
 
