@@ -352,7 +352,37 @@ public class CertificateService {
     }
 
     public void downloadCertificate(String serialNumber) {
-        X509Certificate cert = this.getX509CertificateBySerialNumber(serialNumber);
+        List<X509Certificate> certificateChain = createCertificateChain(getX509CertificateBySerialNumber(serialNumber));
+        String pem = X509CertificateToPEM(certificateChain);
+        writePEMStringToFile(pem);
+    }
+
+    private void writePEMStringToFile(String pem) {
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream("D:\\Documents\\Desktop\\certificate.cer");
+            fos.write(pem.getBytes(StandardCharsets.UTF_8));
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String X509CertificateToPEM(List<X509Certificate> certificateChain) {
+        StringWriter stringWriter = new StringWriter();
+        try (JcaPEMWriter pemWriter = new JcaPEMWriter(stringWriter)) {
+            for (X509Certificate x509cer : certificateChain)
+                pemWriter.writeObject(x509cer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return stringWriter.toString();
+    }
+
+    private List<X509Certificate> createCertificateChain(X509Certificate cert) {
         List<X509Certificate> certificateChain = new ArrayList<>();
         certificateChain.add(cert);
         List<X509Certificate> allCertificates = getAllX509Certificates();
@@ -396,26 +426,7 @@ public class CertificateService {
             }
         }
 
-        StringWriter stringWriter = new StringWriter();
-        try (JcaPEMWriter pemWriter = new JcaPEMWriter(stringWriter)) {
-            for (X509Certificate x509cer : certificateChain)
-                pemWriter.writeObject(x509cer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        String pem = stringWriter.toString();
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream("D:\\Documents\\Desktop\\certificate.cer");
-            fos.write(pem.getBytes(StandardCharsets.UTF_8));
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return certificateChain;
     }
 
     private ArrayList<X509Certificate> getAllX509Certificates(){
