@@ -2,6 +2,7 @@ package com.ftn.security.controller;
 
 import com.ftn.security.dto.*;
 import com.ftn.security.service.CertificateService;
+import com.ftn.security.service.LoggingService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.core.io.Resource;
@@ -24,10 +25,12 @@ import java.util.ArrayList;
 public class CertificateController {
 
     private final CertificateService certificateService;
+    private final LoggingService loggingService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add-root-certificate")
     public void addRootCertificate(@RequestBody  CreateRootCertificateDto dto){
+        loggingService.MakeInfoLog("User " + dto.getAdminMail() + " made root certificate.");
         certificateService.createRootCertificate(dto);
     }
 
@@ -43,12 +46,14 @@ public class CertificateController {
     @GetMapping("/getAllUserCertificates")
     public ResponseEntity<ArrayList<CertificateDTO>> getAllUserCertificates(Principal user){
         System.out.println("USER: " + user.getName());
+        loggingService.MakeInfoLog("User " + user.getName() + " requested all his certificates.");
         return new ResponseEntity<ArrayList<CertificateDTO>>(certificateService.getAllUserCertificatesDTO(user.getName()), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/revoke-certificate")
     public void revokeCertificate(@RequestBody RevokeCertificateDto revokeCertificateDto){
+        loggingService.MakeInfoLog("User " + revokeCertificateDto.getSubjectMail() + " certificate revoked for: " + revokeCertificateDto.getReason()+".");
         certificateService.revokeCertificate(revokeCertificateDto);
     }
 

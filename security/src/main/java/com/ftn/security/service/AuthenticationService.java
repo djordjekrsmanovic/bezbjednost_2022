@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.util.logging.Logger;
+
 @RequiredArgsConstructor
 @Service
 public class AuthenticationService {
@@ -20,6 +22,7 @@ public class AuthenticationService {
     private final ClientService clientService;
     private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
+    private final LoggingService loggingService;
 
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) throws Exception {
         try {

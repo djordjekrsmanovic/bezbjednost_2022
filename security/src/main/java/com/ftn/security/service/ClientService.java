@@ -3,6 +3,7 @@ package com.ftn.security.service;
 import com.ftn.security.model.Client;
 import com.ftn.security.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,10 @@ public class ClientService {
             }
         }
     return clients;
+    }
+
+    public String getLoggedUserMail(){
+        UserDetails userDetails =(UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userDetails.getUsername();
     }
 }
