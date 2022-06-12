@@ -46,6 +46,9 @@ export class LoginService {
   }
 
   isUserLoggedIn(): boolean {
+    if(this.getCurrentUser()==null){
+      return false;
+    }
     return this.getCurrentUser().role == 'ADMIN' || this.getCurrentUser().role == 'USER';
   }
 

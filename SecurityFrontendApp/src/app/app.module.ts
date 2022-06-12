@@ -13,6 +13,7 @@ import { CertificateComponent } from './components/certificate/certificate.compo
 import { AddRootCertificateComponent } from './admin-home-page/add-root-certificate/add-root-certificate.component';
 import { AddCertificateComponent } from './admin-home-page/add-certificate/add-certificate.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     CertificateComponent,
     AddRootCertificateComponent,
     AddCertificateComponent,
+    NotAuthorizedComponent,
   ],
   imports: [
     BrowserModule,
