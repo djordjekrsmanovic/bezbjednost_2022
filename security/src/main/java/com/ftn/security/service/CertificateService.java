@@ -52,6 +52,7 @@ public class CertificateService {
     private final ValidationService<CreateCertificateDto> certificateValidator;
     private final ValidationService<CreateRootCertificateDto> rootCertificateValidator;
     private final ValidationService<LoadCertificateForSigningDto> loadingCertificateValidator;
+    private final LoggingService loggingService;
 
     private static final String INVALID_DATE="Date is not valid";
 
@@ -173,6 +174,7 @@ public class CertificateService {
             X509Certificate root = (X509Certificate) certificates[certificates.length-1];
             certificateIsValid(root, root.getPublicKey());
         } catch (KeyStoreException e) {
+            loggingService.MakeWarningLog("Certificate chain not valid. Issuer serial number is: "+issuerSerialNumber);
             e.printStackTrace();
 
         }
@@ -186,6 +188,7 @@ public class CertificateService {
                 throw new GenericException("Certificate is revoked");
             }
         } catch (CertificateException | NoSuchAlgorithmException | InvalidKeyException | NoSuchProviderException | SignatureException e) {
+            loggingService.MakeWarningLog("Certificate not valid. Cert serial number: " + x509.getSerialNumber());
             throw new GenericException("Certificate chain is not valid");
         }
     }
@@ -362,6 +365,7 @@ public class CertificateService {
                 retValue=false;
             }
         } catch (CertificateExpiredException | CertificateNotYetValidException e) {
+            loggingService.MakeWarningLog("Certificate " +x509Certificate.getSerialNumber() + " is not valid.");
             retValue=false;
         }
         return  retValue;
@@ -415,14 +419,19 @@ public class CertificateService {
                     rootInChain = true;
                     break;
                 } catch (CertificateException e) {
+                    loggingService.MakeWarningLog("Certificate creation failure.");
                     e.printStackTrace();
                 } catch (NoSuchAlgorithmException e) {
+                    loggingService.MakeWarningLog("Certificate creation failure.");
                     e.printStackTrace();
                 } catch (InvalidKeyException e) {
+                    loggingService.MakeWarningLog("Certificate creation failure.");
                     e.printStackTrace();
                 } catch (NoSuchProviderException e) {
+                    loggingService.MakeWarningLog("Certificate creation failure.");
                     e.printStackTrace();
                 } catch (SignatureException e) {
+                    loggingService.MakeWarningLog("Certificate creation failure.");
                     e.printStackTrace();
                 }
 
@@ -432,14 +441,19 @@ public class CertificateService {
                     cert = x509cer;
                     break;
                 } catch (CertificateException e) {
+                    loggingService.MakeWarningLog("Certificate creation failure.");
                     e.printStackTrace();
                 } catch (NoSuchAlgorithmException e) {
+                    loggingService.MakeWarningLog("Certificate creation failure.");
                     e.printStackTrace();
                 } catch (InvalidKeyException e) {
+                    loggingService.MakeWarningLog("Certificate creation failure.");
                     e.printStackTrace();
                 } catch (NoSuchProviderException e) {
+                    loggingService.MakeWarningLog("Certificate creation failure.");
                     e.printStackTrace();
                 } catch (SignatureException e) {
+                    loggingService.MakeWarningLog("Certificate creation failure.");
                     e.printStackTrace();
                 }
             }

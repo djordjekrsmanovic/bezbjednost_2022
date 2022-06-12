@@ -2,6 +2,7 @@ package com.ftn.security.controller;
 
 import com.ftn.security.dto.*;
 import com.ftn.security.service.CertificateService;
+import com.ftn.security.service.ClientService;
 import com.ftn.security.service.LoggingService;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +27,7 @@ public class CertificateController {
 
     private final CertificateService certificateService;
     private final LoggingService loggingService;
+    private final ClientService clientService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add-root-certificate")
@@ -37,6 +39,7 @@ public class CertificateController {
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/add-certificate")
     public void addCertificate(@RequestBody CreateCertificateDto dto){
+        loggingService.MakeInfoLog("User " + dto.getIssuerMail() + " added certificate.");
         certificateService.createCertificate(dto);
     }
 
@@ -60,13 +63,14 @@ public class CertificateController {
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/getAllCertificates")
     public ResponseEntity<ArrayList<CertificateDTO>> gettAllCertificates(){
+        loggingService.MakeInfoLog("User " + clientService.getLoggedUserMail() + " requested all certificates.");
         return new ResponseEntity<ArrayList<CertificateDTO>>(certificateService.getAllCertificates(),HttpStatus.OK);
     }
 
     //@PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/get-certificate-for-signing")
     public ResponseEntity<?> getCertificatesForSigning(@RequestBody LoadCertificateForSigningDto dto){
-
+    loggingService.MakeInfoLog("User " + clientService.getLoggedUserMail() + " requested certificate for signing.");
         return new ResponseEntity<>(certificateService.getCertificateForSigning(dto),HttpStatus.OK);
 
     }
@@ -80,13 +84,14 @@ public class CertificateController {
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + certDownload.getFilename() + "\"")
                     .body(certDownload);
         }
+        loggingService.MakeInfoLog("User " + clientService.getLoggedUserMail() + " downloaded certificate.");
         return new ResponseEntity<Resource>(HttpStatus.BAD_REQUEST);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/get-user-certificate-for-signing")
     public ResponseEntity<?> getUserCertificatesForSigning(@RequestBody LoadCertificateForSigningDto dto){
-
+        loggingService.MakeInfoLog("User " + clientService.getLoggedUserMail() + " requested certificates for signing.");
         return new ResponseEntity<>(certificateService.getUserCertificateForSigning(dto),HttpStatus.OK);
 
     }
