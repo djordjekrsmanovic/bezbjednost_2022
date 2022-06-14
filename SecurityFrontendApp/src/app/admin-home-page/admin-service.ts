@@ -25,15 +25,15 @@ import { CreateCertificateDto } from '../model/CreateCertificateDto';
     revokeCertificate(dto:revokeCertificateDTO){
       const headers = this.loginService.getHeaders(); 
       const body=JSON.stringify(dto) 
-        this.http.post('http://localhost:8080/api/certificates/revoke-certificate',body,{'headers': headers}).subscribe(data=>console.log(data)
+        this.http.post(server + 'api/certificates/revoke-certificate',body,{'headers': headers}).subscribe(data=>console.log(data)
         );
     }
 
     downloadCertificate() : Observable<Blob> {
-      return this.http.get('http://localhost:8080/downloadCertificate', {responseType: 'blob'});
+      return this.http.get(server + 'downloadCertificate', {responseType: 'blob'});
   }
   
-    url = 'http://localhost:8080/' + 'api/certificates';
+    url = server + 'api/certificates';
     downloadCertificateWeb(serialNumber: string): Observable<Blob> {
       return this.http.get(this.url + "/downloadCertificate/" + serialNumber, {
         responseType: 'blob'
@@ -43,12 +43,12 @@ import { CreateCertificateDto } from '../model/CreateCertificateDto';
     addRootCertificate(dto :rootCertificateDTO){
       const headers = this.loginService.getHeaders();  
       const body=JSON.stringify(dto) 
-      this.http.post('http://localhost:8080/api/certificates/add-root-certificate',body,{'headers': headers}).subscribe(data=>console.log(data),error=> alert(error.error));
+      this.http.post(server + 'api/certificates/add-root-certificate',body,{'headers': headers}).subscribe(data=>console.log(data),error=> alert(error.error));
     }
 
     getAllCertificates(): Observable<CertificateDTO[]> {
       const headers = this.loginService.getHeaders(); 
-      return this.http.get<CertificateDTO[]>('http://localhost:8080/api/certificates/getAllCertificates',{headers:headers});
+      return this.http.get<CertificateDTO[]>(server + 'api/certificates/getAllCertificates',{headers:headers});
     }
 
     getCertificateForSigning(dates:LoadCertificatesForSigningDto):Observable<CertificateDTO[]>{

@@ -12,7 +12,7 @@ import { CertificateDTO } from '../model/CertificateDTO';
 })
 export class ClientService {
 
-  url = 'http://localhost:8080/' + 'api/certificates'; // TODO: napraviti globalnu promenljivu za http... deo
+  url = server + 'api/certificates'; // TODO: napraviti globalnu promenljivu za http... deo
 
 
   constructor(private _http: HttpClient, private route: Router, private loginService: LoginService) { }

@@ -3,14 +3,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthenticationRequest } from '../model/AuthenticationRequest';
 import { AuthenticationResponse } from '../model/AuthenticationResponse';
-
+import { server } from '../app-global';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
-  url = 'http://localhost:8080/' + 'api/login'; // TODO: napraviti globalnu promenljivu za http... deo
+  url = server + 'api/login'; // TODO: napraviti globalnu promenljivu za http... deo
   private user = new AuthenticationResponse();
 
   constructor(private _http: HttpClient, private route: Router) {}
