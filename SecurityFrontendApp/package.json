@@ -1,9 +1,9 @@
 {
-  "name": "security-frontend-app",
+  "name": "secur'ity-frontend-app",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --ssl true --ssl-cert ./ssl_certificate/front.crt",
+    "start": "ng serve --ssl true --ssl-cert ./ssl_certificate/front.crt --ssl-key ./ssl_certificate/front.key",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
