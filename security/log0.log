@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-06-16T10:57:59.104895400Z</date>
+  <millis>1655377079104</millis>
+  <nanos>895400</nanos>
+  <sequence>4</sequence>
+  <logger>com.ftn.security.service.LoggingService</logger>
+  <level>INFO</level>
+  <class>com.ftn.security.service.LoggingService</class>
+  <method>MakeInfoLog</method>
+  <thread>25</thread>
+  <message>User bojan@gmail.com has logged in.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-06-16T11:43:46.146314Z</date>
+  <millis>1655379826146</millis>
+  <nanos>314000</nanos>
+  <sequence>4</sequence>
+  <logger>com.ftn.security.service.LoggingService</logger>
+  <level>INFO</level>
+  <class>com.ftn.security.service.LoggingService</class>
+  <method>MakeInfoLog</method>
+  <thread>25</thread>
+  <message>User bojan@gmail.com has logged in.</message>
+</record>
+<record>
+  <date>2022-06-16T11:43:46.667315500Z</date>
+  <millis>1655379826667</millis>
+  <nanos>315500</nanos>
+  <sequence>6</sequence>
+  <logger>com.ftn.security.service.LoggingService</logger>
+  <level>INFO</level>
+  <class>com.ftn.security.service.LoggingService</class>
+  <method>MakeInfoLog</method>
+  <thread>27</thread>
+  <message>User bojan@gmail.com requested all certificates.</message>
+</record>
+<record>
+  <date>2022-06-16T11:43:47.435730300Z</date>
+  <millis>1655379827435</millis>
+  <nanos>730300</nanos>
+  <sequence>8</sequence>
+  <logger>com.ftn.security.service.LoggingService</logger>
+  <level>INFO</level>
+  <class>com.ftn.security.service.LoggingService</class>
+  <method>MakeInfoLog</method>
+  <thread>28</thread>
+  <message>User bojan@gmail.com requested all certificates.</message>
+</record>
+<record>
+  <date>2022-06-16T11:44:24.365689800Z</date>
+  <millis>1655379864365</millis>
+  <nanos>689800</nanos>
+  <sequence>10</sequence>
+  <logger>com.ftn.security.service.LoggingService</logger>
+  <level>INFO</level>
+  <class>com.ftn.security.service.LoggingService</class>
+  <method>MakeInfoLog</method>
+  <thread>30</thread>
+  <message>User bojan@gmail.com requested all users without principal list.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-06-16T11:47:09.943519700Z</date>
+  <millis>1655380029943</millis>
+  <nanos>519700</nanos>
+  <sequence>5</sequence>
+  <logger>com.ftn.security.service.LoggingService</logger>
+  <level>INFO</level>
+  <class>com.ftn.security.service.LoggingService</class>
+  <method>MakeInfoLog</method>
+  <thread>25</thread>
+  <message>User bojan@gmail.com requested all certificates.</message>
+</record>
+<record>
+  <date>2022-06-16T11:47:13.459971900Z</date>
+  <millis>1655380033459</millis>
+  <nanos>971900</nanos>
+  <sequence>6</sequence>
+  <logger>com.ftn.security.service.LoggingService</logger>
+  <level>INFO</level>
+  <class>com.ftn.security.service.LoggingService</class>
+  <method>MakeInfoLog</method>
+  <thread>27</thread>
+  <message>User bojan@gmail.com requested all users without principal list.</message>
+</record>
+</log>

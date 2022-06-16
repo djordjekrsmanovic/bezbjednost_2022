@@ -22,7 +22,7 @@ public class ClientController {
     private final ModelDtoMapper modelDtoMapper;
     private final LoggingService loggingService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('GET_USERS_PERMISSION')")
     @GetMapping("/get-users")
     List<UserDto> getUsers(){
         List<Client> users=clientService.getUsers();
@@ -30,7 +30,7 @@ public class ClientController {
         return modelDtoMapper.modelToDtoList(users);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @PreAuthorize("hasAuthority('GET_USERS_WITHOUT_PRINCIPAL_PERMISSION')")
     @GetMapping("/get-users-without-principal")
     List<UserDto> getUsersWithoutPrincipal(){
         List<Client> users=clientService.getUsersWithoutPrincipal();
