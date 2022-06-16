@@ -12,6 +12,6 @@ public interface ClientRepository extends EntityRepository<Client> {
     @Query("SELECT c FROM Client c WHERE c.mail=?1")
     Client getClientByMail(String mail);
 
-    @Query("SELECT c FROM Client c WHERE c.role=com.ftn.security.model.enumeration.Role.USER")
+    @Query("SELECT c FROM Client c")
     List<Client> getUsers();
 }

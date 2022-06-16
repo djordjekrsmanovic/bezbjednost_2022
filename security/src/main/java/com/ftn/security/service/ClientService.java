@@ -21,7 +21,13 @@ public class ClientService {
     }
 
     public List<Client> getUsers(){
-        return clientRepository.getUsers();
+        List<Client> clients = new ArrayList<>();
+        for(Client c : clientRepository.findAll()){
+            if(c.getRole().getName()=="USER"){
+                clients.add(c);
+            }
+        }
+        return clients;
     }
 
     public List<Client> getUsersWithoutPrincipal(){

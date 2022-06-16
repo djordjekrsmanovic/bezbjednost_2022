@@ -36,7 +36,7 @@ public class AuthenticationService {
         Client client = clientService.getClientByMail(authenticationRequest.getMail());
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getMail());
         final String jwt = jwtUtil.generateToken(userDetails);
-        return new AuthenticationResponse(jwt,client.getMail(),client.getRole());
+        return new AuthenticationResponse(jwt,client.getMail(),client.getRoleName());
 
     }
 }

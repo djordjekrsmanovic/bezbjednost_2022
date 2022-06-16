@@ -1,6 +1,6 @@
 package com.ftn.security.authentication;
 
-import com.ftn.security.model.enumeration.Role;
+import com.ftn.security.model.Role;
 import com.ftn.security.model.Client;
 import com.ftn.security.service.ClientService;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +27,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(email);
         }
-        return new User(email, user.getPassword(), getRole(user.getRole()));
+        return new User(email, user.getPassword(), user.getAuthorities());
     }
 
     private List<SimpleGrantedAuthority> getRole(Role role) {
         List<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
-        String roleName = ROLE_PREFIX + role;
+        String roleName = ROLE_PREFIX + role.getName();
         grantedAuthorities.add(new SimpleGrantedAuthority(roleName));
         return grantedAuthorities;
     }

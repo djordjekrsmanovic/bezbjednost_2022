@@ -1,6 +1,5 @@
 package com.ftn.security.authentication.model;
 
-import com.ftn.security.model.enumeration.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,6 @@ public class AuthenticationResponse {
 
     private String jwt;
     private String mail;
-    private Role role;
+    private String role;
 
 }
