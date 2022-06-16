@@ -1,1 +1,3 @@
-export const server:string='http://localhost:8080/';
+import { environment } from "src/environments/environment";
+
+export const server: string = environment.backend_url;

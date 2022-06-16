@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-06-15T09:30:48.178408800Z</date>
+  <millis>1655285448178</millis>
+  <nanos>408800</nanos>
+  <sequence>4</sequence>
+  <logger>com.ftn.security.service.LoggingService</logger>
+  <level>INFO</level>
+  <class>com.ftn.security.service.LoggingService</class>
+  <method>MakeInfoLog</method>
+  <thread>28</thread>
+  <message>User admin@gmail.com has logged in.</message>
+</record>
+<record>
+  <date>2022-06-15T09:30:49.906325200Z</date>
+  <millis>1655285449906</millis>
+  <nanos>325200</nanos>
+  <sequence>6</sequence>
+  <logger>com.ftn.security.service.LoggingService</logger>
+  <level>INFO</level>
+  <class>com.ftn.security.service.LoggingService</class>
+  <method>MakeInfoLog</method>
+  <thread>30</thread>
+  <message>User admin@gmail.com requested all certificates.</message>
+</record>
