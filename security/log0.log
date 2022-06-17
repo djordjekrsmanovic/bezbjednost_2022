@@ -4,3 +4,30 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 </log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-06-17T20:23:17.838734500Z</date>
+  <millis>1655497397838</millis>
+  <nanos>734500</nanos>
+  <sequence>4</sequence>
+  <logger>com.ftn.security.service.LoggingService</logger>
+  <level>INFO</level>
+  <class>com.ftn.security.service.LoggingService</class>
+  <method>MakeInfoLog</method>
+  <thread>60</thread>
+  <message>User admin@gmail.com has logged in.</message>
+</record>
+<record>
+  <date>2022-06-17T20:23:19.373814100Z</date>
+  <millis>1655497399373</millis>
+  <nanos>814100</nanos>
+  <sequence>5</sequence>
+  <logger>com.ftn.security.service.LoggingService</logger>
+  <level>INFO</level>
+  <class>com.ftn.security.service.LoggingService</class>
+  <method>MakeInfoLog</method>
+  <thread>62</thread>
+  <message>User admin@gmail.com requested all certificates.</message>
+</record>
